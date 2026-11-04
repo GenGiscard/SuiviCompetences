@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suivi des compétences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6fb;--sf:#fff;--ink:#1d2433;--mu:#6b7385;--ln:#e3e7ef;--pr:#3056d3;--prl:#e8eefc;
+--n1:#e5484d;--n1l:#fdecec;--n2:#e8890c;--n2l:#fff1dc;--n3:#2a9d63;--n3l:#e3f5eb;--n4:#2b6cd4;--n4l:#e4edfc;--n0:#a2a9b8;--n0l:#eef0f4;--r:14px}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
+#demo:empty{display:none}
+#demo{background:#fff4cf;color:#6e5200;text-align:center;padding:7px 12px;font-size:13px;font-weight:700}
+.wrap{max-width:1000px;margin:0 auto;padding:26px 16px 90px}
+.wrap.narrow{max-width:520px}
+.brand{display:flex;align-items:center;gap:14px;margin:6px 0 22px}
+.logo{width:46px;height:46px;border-radius:13px;background:var(--pr);display:grid;place-items:center;flex:none}
+.logo svg{width:28px;height:28px}
+h1{font-size:27px;margin:0;font-weight:900;line-height:1.1}
+h2{font-size:22px;margin:0;font-weight:900}
+.sub{color:var(--mu);font-size:14px;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:10px;background:var(--pr);color:#fff;font-weight:800;font-size:15px;transition:filter .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:var(--prl);color:var(--pr)}
+.btn.ghost{background:var(--sf);color:var(--mu);border:1.5px solid var(--ln)}
+.btn.ghost:hover{color:var(--ink);border-color:#c9cfdb;filter:none}
+.btn.danger{background:var(--n1);color:#fff}
+.btn.ghost.danger{background:var(--sf);color:var(--n1);border-color:#f3c4c5}
+.btn.sm{padding:6px 11px;font-size:13px;border-radius:8px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:18px}
+.empty{text-align:center;color:var(--mu);font-weight:700;padding:34px 18px}
+.foot{margin-top:40px;text-align:center}
+.back{color:var(--mu);font-weight:800;font-size:15px;padding:6px 0;margin-bottom:6px}
+.back:hover{color:var(--pr)}
+.niv-title{font-weight:900;color:var(--mu);font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:20px 0 9px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.cbtn{background:var(--sf);border:2px solid var(--ln);border-radius:16px;padding:22px 8px;font-size:24px;font-weight:900;transition:.15s}
+.cbtn:hover{border-color:var(--pr);color:var(--pr);transform:translateY(-2px)}
+.nlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.nbtn{text-align:left;background:var(--sf);border:2px solid var(--ln);border-radius:12px;padding:15px 16px;font-size:17px;font-weight:600;transition:.15s}
+.nbtn b{font-weight:900}
+.nbtn:hover{border-color:var(--pr);color:var(--pr)}
+.dots{display:flex;gap:16px;justify-content:center;margin:10px 0 14px}
+.dot{width:22px;height:22px;border-radius:50%;border:3px solid var(--pr);transition:.15s}
+.dot.on{background:var(--pr)}
+.msg{text-align:center;font-weight:800;min-height:24px;margin:6px 0}
+.msg.err{color:var(--n1)}
+.pad{display:grid;grid-template-columns:repeat(3,86px);gap:12px;justify-content:center;margin-top:14px}
+.key{height:74px;border-radius:16px;background:var(--sf);border:2px solid var(--ln);font-size:28px;font-weight:900;transition:.1s}
+.key:hover{border-color:var(--pr)}
+.key:active{background:var(--prl);transform:scale(.96)}
+.key.sm{font-size:15px;color:var(--mu)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.hello{font-size:26px;font-weight:900}
+.tabs{display:flex;gap:6px;background:#e7eaf2;padding:4px;border-radius:12px;width:fit-content;margin-bottom:20px}
+.tab{padding:9px 18px;border-radius:9px;font-weight:800;color:var(--mu)}
+.tab.on{background:var(--sf);color:var(--ink);box-shadow:0 1px 3px rgba(20,30,60,.1)}
+.tpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.tpcard{text-align:left;background:var(--sf);border:2px solid var(--ln);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;transition:.15s}
+.tpcard:hover{border-color:var(--pr);transform:translateY(-2px)}
+.tpt{font-size:18px;font-weight:900}
+.prog{height:9px;background:#e9edf4;border-radius:6px;overflow:hidden;display:flex}
+.prog i{display:block;height:100%}
+.tpm{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:800;color:var(--mu)}
+.tpm .ok{color:var(--n3)}
+.tph{margin:4px 0 4px}
+.cgroup{margin-top:22px}
+.cghead{display:flex;align-items:center;gap:10px;font-size:16px}
+.cghead b{font-weight:900}
+.ccard{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:16px 18px;margin-top:10px}
+.chead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:900;color:#fff;white-space:nowrap}
+.code{font-weight:900;font-size:13px;color:var(--mu)}
+.crit{font-size:13px;font-weight:800;color:var(--pr);padding:4px 10px;border-radius:8px;background:var(--prl)}
+.crit.on{background:var(--pr);color:#fff}
+.cel{font-size:18px;font-weight:800;margin-top:6px}
+ul.ind{margin:10px 0 0;padding:10px 12px 10px 30px;background:#f6f8fc;border-radius:10px;font-size:14px;font-weight:600;color:#3b4457}
+ul.ind li{margin:3px 0}
+.lvls{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.lvls.n3{grid-template-columns:repeat(3,1fr)}
+.lvl{border:2px solid var(--ln);border-radius:13px;padding:13px 6px;background:var(--sf);font-weight:800;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:.12s;color:var(--ink)}
+.lvl:hover{border-color:var(--lc)}
+.lvl.on{border-color:var(--lc);background:var(--ll);color:var(--lc)}
+.l1{--lc:var(--n1);--ll:var(--n1l)}.l2{--lc:var(--n2);--ll:var(--n2l)}.l3{--lc:var(--n3);--ll:var(--n3l)}.l4{--lc:var(--n4);--ll:var(--n4l)}
+.gauge{display:flex;gap:4px;align-items:flex-end;height:24px}
+.gauge i{width:8px;border-radius:2px;background:#dfe3ea}
+.gauge i.f{background:var(--lc)}
+.prof{margin-top:12px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;color:var(--mu);flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:8px;font-weight:900;font-size:13px;white-space:nowrap}
+.b0{background:var(--n0l);color:var(--n0)}.b1{background:var(--n1l);color:var(--n1)}.b2{background:var(--n2l);color:var(--n2)}.b3{background:var(--n3l);color:var(--n3)}.b4{background:var(--n4l);color:var(--n4)}
+.progtop{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-bottom:6px}
+.big{font-size:21px;font-weight:900;margin-bottom:10px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;font-weight:700;color:var(--mu)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:13px;height:13px;border-radius:4px;display:inline-block}
+.sw.s0{background:var(--n0l);border:1px solid #d6dae3}.sw.s1{background:var(--n1)}.sw.s2{background:var(--n2)}.sw.s3{background:var(--n3)}.sw.s4{background:var(--n4)}
+.dtitle{display:flex;align-items:center;gap:9px;font-weight:900;font-size:16px;margin:24px 0 10px}
+.dtitle i{width:12px;height:12px;border-radius:4px;flex:none}
+.cmp{background:var(--sf);border:1px solid var(--ln);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.cmph{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:14px 16px 8px;text-align:left}
+.cmpl{font-weight:800;font-size:15px}
+.cmpn{font-weight:900;font-size:14px;color:var(--mu)}
+.segbar{display:flex;gap:3px;padding:0 16px 14px}
+.segbar i{flex:1;height:10px;border-radius:3px}
+.segbar i.c0{background:#e6e9f0}.segbar i.c1{background:var(--n1)}.segbar i.c2{background:var(--n2)}.segbar i.c3{background:var(--n3)}.segbar i.c4{background:var(--n4)}
+.arow{display:grid;grid-template-columns:62px 1fr auto auto;gap:12px;align-items:center;padding:10px 16px;border-top:1px solid var(--ln);font-size:14px}
+.arow .al{font-weight:700}
+.tdots{display:flex;gap:4px}
+.arow3{display:grid;grid-template-columns:62px 1fr auto auto;gap:14px;align-items:center;padding:12px 16px;border-top:1px solid var(--ln);font-size:14px}
+.arow3 .al{font-weight:700;margin-bottom:4px}
+.crit.sm{font-size:12px;padding:3px 8px}
+.who{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.lab{font-size:11px;font-weight:900;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
+.seg.big .sg{padding:8px 11px;font-size:13px}
+.td{width:26px;height:20px;border-radius:5px;display:grid;place-items:center;font-size:10px;font-weight:900}
+/* admin */
+.adm{display:grid;grid-template-columns:228px 1fr;min-height:100vh}
+.side{background:var(--sf);border-right:1px solid var(--ln);padding:18px 12px;display:flex;flex-direction:column;gap:3px;position:sticky;top:0;height:100vh}
+.sbrand{display:flex;align-items:center;gap:10px;padding:2px 8px 18px}
+.sbrand .logo{width:38px;height:38px;border-radius:11px}.sbrand .logo svg{width:22px;height:22px}
+.side .it{text-align:left;padding:10px 12px;border-radius:10px;font-weight:800;color:var(--mu);display:flex;gap:11px;align-items:center;font-size:15px}
+.side .it:hover{color:var(--ink);background:#f3f5f9}
+.side .it.on{background:var(--prl);color:var(--pr)}
+.side svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.side .sp{flex:1}
+.main{padding:24px 28px 120px;min-width:0}
+.ahead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.inp{width:100%;padding:10px 12px;border:1.5px solid var(--ln);border-radius:10px;background:#fff;outline:none}
+.inp:focus{border-color:var(--pr)}
+select.inp{width:auto;font-weight:800;cursor:pointer}
+textarea.inp{min-height:100px;resize:vertical}
+.field{margin-bottom:12px}
+.field label{display:block;font-weight:800;font-size:13px;color:var(--mu);margin-bottom:5px}
+.per{display:flex;background:#e7eaf2;padding:3px;border-radius:10px;gap:3px}
+.pchip{padding:6px 12px;border-radius:8px;font-weight:800;font-size:13px;color:var(--mu)}
+.pchip.on{background:var(--sf);color:var(--ink);box-shadow:0 1px 3px rgba(20,30,60,.1)}
+.ctiles{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px}
+.ctile{position:relative;overflow:hidden;background:var(--sf);border:1.5px solid var(--ln);border-radius:11px;padding:8px 14px 11px;min-width:96px;text-align:left;display:flex;flex-direction:column}
+.ctile b{font-size:15px}.ctile span{font-size:12px;color:var(--mu);font-weight:800}
+.ctile i{position:absolute;left:0;bottom:0;height:4px;background:var(--n3)}
+.ctile.on{border-color:var(--pr);background:var(--prl)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:14px 16px;text-align:left}
+.kpi .v{font-size:28px;font-weight:900;line-height:1.1}
+.kpi .k{color:var(--mu);font-size:13px;font-weight:800}
+button.kpi:hover{border-color:var(--pr)}
+.kpi.warn .v{color:var(--n2)}
+.sec{margin-bottom:16px}
+.sec h3{margin:0 0 4px;font-size:16px;font-weight:900}
+.sec .sub{margin-bottom:12px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.brow{display:grid;grid-template-columns:minmax(140px,300px) 1fr 52px;gap:12px;align-items:center;margin:6px 0;font-size:14px;width:100%;text-align:left;padding:3px 0}
+button.brow:hover .bl{color:var(--pr)}
+.brow .bl{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brow .bl b{font-weight:900;margin-right:6px}
+.brow.subr{font-size:13px}
+.brow.subr .bl{padding-left:22px;color:var(--mu)}
+.stack{height:20px;border-radius:6px;overflow:hidden;display:flex;background:var(--n0l)}
+.brow.subr .stack{height:12px}
+.stack i{height:100%}
+.brow .bp{font-weight:900;text-align:right}
+.scroll{overflow-x:auto}
+table.hm{border-collapse:separate;border-spacing:3px;font-size:13px}
+table.hm th{font-size:12px;font-weight:900;color:var(--mu);padding:3px;white-space:nowrap}
+td.nm{padding-right:10px;white-space:nowrap}
+.nmb{font-weight:700;font-size:14px;color:var(--ink);text-align:left}
+.nmb:hover{color:var(--pr);text-decoration:underline}
+.hc{display:grid;place-items:center;width:48px;height:30px;border-radius:7px;font-weight:900;font-size:11px}
+.c0{background:var(--n0l);color:var(--n0)}.c1{background:var(--n1l);color:var(--n1)}.c2{background:var(--n2l);color:var(--n2)}.c3{background:var(--n3l);color:var(--n3)}.c4{background:var(--n4l);color:var(--n4)}
+.lrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln);font-size:14px}
+.lrow:last-child{border-bottom:none}
+.tpp{margin:12px 0}
+.tpp .tn{font-weight:800;font-size:14px;margin-bottom:5px}
+.tpp .prog{margin:4px 0}
+.cov{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.cov span{background:var(--n0l);color:#5a6378;border-radius:6px;padding:2px 7px;font-size:12px;font-weight:800}
+.cellb{width:52px;height:38px;border-radius:8px;font-weight:900;font-size:12px;position:relative;border:2.5px solid transparent;transition:transform .1s}
+.cellb:hover{transform:scale(1.07)}
+.cellb .ad{position:absolute;right:3px;top:3px;width:9px;height:9px;border-radius:50%;border:1.5px solid #fff}
+.cellb.sel{border-color:var(--ink)}
+table.ev{border-collapse:separate;border-spacing:4px}
+table.ev th{font-size:12px;font-weight:900;color:var(--mu);padding:4px}
+table.ev th.gh{color:var(--ink);font-size:13px;padding-bottom:6px}
+.hint{font-size:13px;color:var(--mu);font-weight:700;margin:4px 0 14px}
+.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.bar .sp{flex:1}
+.picker{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--sf);border:1px solid var(--ln);box-shadow:0 12px 34px rgba(20,30,60,.2);border-radius:16px;padding:12px 14px;display:flex;gap:8px;align-items:center;z-index:30;flex-wrap:wrap;max-width:calc(100vw - 24px)}
+.pinfo{display:flex;flex-direction:column;font-size:13px;margin-right:6px;min-width:170px;max-width:300px}
+.pinfo b{font-size:15px}
+.pk{min-width:58px;height:46px;border-radius:10px;font-weight:900;border:2.5px solid transparent;padding:0 8px}
+.pk.on{border-color:var(--ink)}
+.ov{position:fixed;inset:0;background:rgba(20,28,48,.42);display:grid;place-items:center;z-index:40;padding:16px}
+.modal{background:var(--sf);border-radius:18px;max-width:1000px;width:100%;max-height:92vh;overflow:auto;padding:22px;cursor:default}
+.fsum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.fs{border:1.5px solid var(--ln);border-radius:12px;padding:10px 12px}
+.fs b{font-size:13px;color:var(--mu);font-weight:900;display:block}
+.fs .v{font-size:22px;font-weight:900}
+.fs .n{font-size:13px;font-weight:800;color:var(--mu)}
+.fs.cur{border-color:var(--pr);background:var(--prl)}
+table.fiche{width:100%;border-collapse:collapse;font-size:14px}
+table.fiche td,table.fiche th{padding:7px 6px;border-bottom:1px solid var(--ln);vertical-align:middle}
+table.fiche th{font-size:12px;color:var(--mu);font-weight:900;text-align:center}
+table.fiche tr.ch td{background:#f6f8fc;font-weight:900;border-bottom:none;padding-top:12px}
+table.fiche tr.bh td{font-weight:900;font-size:15px;padding-top:18px;border-bottom:2px solid var(--ln)}
+table.fiche td.cd{font-weight:900;color:var(--mu);white-space:nowrap;font-size:13px}
+table.fiche td.ct{text-align:center}
+.mini{display:inline-grid;place-items:center;min-width:36px;height:24px;border-radius:6px;font-weight:900;font-size:11px}
+.seg{display:inline-flex;border:1.5px solid var(--ln);border-radius:9px;overflow:hidden}
+.sg{padding:5px 9px;font-weight:900;font-size:12px;color:var(--mu);background:var(--sf);border-left:1px solid var(--ln)}
+.sg:first-child{border-left:none}
+.sg:hover{background:#f3f5f9}
+.sg.on.c1{background:var(--n1);color:#fff}.sg.on.c2{background:var(--n2);color:#fff}.sg.on.c3{background:var(--n3);color:#fff}.sg.on.c4{background:var(--n4);color:#fff}
+.trow{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0}
+.cchip{background:var(--prl);color:var(--pr);border-radius:7px;padding:2px 8px;font-size:12px;font-weight:900}
+.acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.switch{display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:13px;cursor:pointer;color:var(--mu)}
+.switch input{appearance:none;width:38px;height:22px;border-radius:999px;background:#d3d8e2;position:relative;cursor:pointer;transition:.15s;margin:0}
+.switch input::after{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.15s}
+.switch input:checked{background:var(--n3)}
+.switch input:checked::after{left:19px}
+.chkgrid{display:flex;flex-wrap:wrap;gap:7px;margin:6px 0 12px}
+.chk{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border:1.5px solid var(--ln);border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;background:var(--sf)}
+.chk.on{border-color:var(--pr);background:var(--prl);color:var(--pr)}
+.chk input{margin:0;accent-color:var(--pr);flex:none}
+.chk.wide{width:100%}
+.chk b{min-width:58px}
+.glabel{display:flex;align-items:center;gap:10px;font-weight:900;font-size:14px;margin-top:12px;flex-wrap:wrap}
+.arow2{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:start;padding:10px 0;border-top:1px solid var(--ln)}
+.arow2 .cl{font-weight:800;font-size:14px}
+.arow2 .ix{font-size:12.5px;color:var(--mu);font-weight:600;margin-top:3px}
+.confirm{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:13px;color:var(--n1)}
+.codev{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:800;font-size:17px;letter-spacing:.12em}
+table.lst{width:100%;border-collapse:collapse;font-size:14px}
+table.lst td,table.lst th{padding:9px 8px;border-bottom:1px solid var(--ln);text-align:left}
+table.lst th{font-size:12px;color:var(--mu);font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.mode{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mopt{text-align:left;border:2px solid var(--ln);border-radius:12px;padding:12px 14px;background:var(--sf)}
+.mopt b{display:block;font-size:15px}
+.mopt.on{border-color:var(--pr);background:var(--prl)}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;word-break:break-all;color:var(--mu)}
+.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-90px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:11px;font-weight:800;font-size:14px;z-index:60;transition:transform .25s;pointer-events:none}
+.toast.on{transform:translate(-50%,0)}
+.toast.err{background:var(--n1)}
+@media(max-width:820px){
+ .adm{grid-template-columns:1fr}
+ .side{position:static;height:auto;flex-direction:row;overflow-x:auto;padding:10px;gap:4px}
+ .side .sbrand,.side .sp{display:none}
+ .side .it{white-space:nowrap;padding:8px 10px}
+ .main{padding:18px 14px 120px}
+ .cols,.mode{grid-template-columns:1fr}
+ .brow{grid-template-columns:110px 1fr 44px}
+ .fsum{grid-template-columns:repeat(2,1fr)}
+ .arow{grid-template-columns:52px 1fr auto}
+ .arow .tdots{display:none}
+ .arow3{grid-template-columns:52px 1fr}
+ .arow3 .who{grid-column:2}
+}
+@media(max-width:560px){.lvls{grid-template-columns:repeat(2,1fr)}.lvls.n3{grid-template-columns:repeat(3,1fr)}.pad{grid-template-columns:repeat(3,76px)}}
+</style>
+</head>
+<body>
+<div id="demo"></div>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+<script>
+'use strict';
+/* ===== Configuration ===== */
+const FB_URL='https://evaluation-bloc-default-rtdb.europe-west1.firebasedatabase.app';
+const ROOT='suivi_competences';
+const DEMO=/demo/i.test(location.hash);
+
+const ECH={
+ e3:[{s:'NA',nom:'Non acquis',el:'Pas encore'},{s:'ECA',nom:'En cours d\u2019acquisition',el:'En cours'},{s:'A',nom:'Acquis',el:'Je maîtrise'}],
+ e4:[{s:'MI',nom:'Maîtrise insuffisante',el:'Pas encore'},{s:'MF',nom:'Maîtrise fragile',el:'Avec de l\u2019aide'},{s:'MS',nom:'Maîtrise satisfaisante',el:'Je sais faire'},{s:'TBM',nom:'Très bonne maîtrise',el:'Je peux l\u2019expliquer'}]
+};
+
+/* ----- Référentiel Bac pro MFER (arrêté du 28 juillet 2026) ----- */
+const MFER_BLOCS={
+ b1:{nom:'Bloc 1 – Préparer une intervention (U2)',court:'U2 Préparation',c:'#3056d3',o:1},
+ b2:{nom:'Bloc 2 – Réaliser et mettre en service une installation (U31)',court:'U31 Réalisation',c:'#0e9594',o:2},
+ b3:{nom:'Bloc 3 – Assurer la maintenance d\u2019une installation (U32)',court:'U32 Maintenance',c:'#c2410c',o:3}
+};
+const MFER=[
+ ['C1','b1','Analyser les conditions de l\u2019opération et son contexte',[
+  ['Collecter les données nécessaires à l\u2019intervention','Les données techniques nécessaires à l\u2019intervention sont identifiées|La collecte des informations nécessaires à l\u2019intervention est complète et exploitable'],
+  ['Ordonner les données nécessaires à l\u2019intervention','Le classement des données est exploitable et respecte les règles de l\u2019entreprise'],
+  ['Repérer les contraintes techniques liées à l\u2019intervention','Les contraintes techniques et d\u2019exécution sont repérées|Les contraintes liées à l\u2019efficacité énergétique sont repérées|Les risques professionnels sont évalués'],
+  ['Repérer les contraintes d\u2019environnement de travail liées à l\u2019intervention','Les contraintes d\u2019environnement de travail sont recensées|Les mesures de prévention de santé et sécurité au travail sont proposées'],
+  ['S\u2019assurer de la planification de l\u2019intervention','Les interactions avec les autres intervenants sont repérées'],
+  ['Identifier les habilitations et les certifications nécessaires aux opérations','Les habilitations et certifications nécessaires à l\u2019opération sont identifiées'],
+  ['Informer à l\u2019interne et à l\u2019externe des contraintes liées à l\u2019intervention','Les contraintes sont prises en compte et donnent lieu à une solution']]],
+ ['C2','b1','Analyser et exploiter les données techniques de l\u2019intervention',[
+  ['Identifier les éléments d\u2019un réseau fluidique et d\u2019un réseau électrique','L\u2019identification des éléments permet de déterminer leurs caractéristiques|Les fonctions principales de chaque élément sont identifiées|Les différents éléments sont repérés sur les différents schémas'],
+  ['Déterminer les caractéristiques des différents éléments de l\u2019installation','Les caractéristiques sont identifiées et conformes aux normes en vigueur'],
+  ['Identifier les grandeurs physiques nominales de l\u2019installation (températures, pression, puissances, intensités, tensions…)','Les grandeurs physiques sont déterminées, interprétées et associées à des moyens de mesure, de capteurs et de protection|Le dimensionnement des matériels est vérifié et justifié'],
+  ['Identifier les consignes de régulation et de sécurité spécifiques à l\u2019installation','Les valeurs identifiées permettent de prévoir le réglage des appareils de l\u2019installation'],
+  ['Schématiser tout ou partie d\u2019une installation, manuellement ou avec un outil numérique','Les schémas et/ou les croquis sont exploitables|Les conventions de représentation sont respectées'],
+  ['Repérer, identifier la connectique des schémas électriques d\u2019une installation','Les éléments à raccorder, le type et la section des conducteurs sont identifiés'],
+  ['Proposer une modification technique en fonction des contraintes repérées','La modification est approuvée et portée au dossier technique|La solution technique proposée intègre les enjeux d\u2019efficacité énergétique']]],
+ ['C3','b1','Choisir les matériels, équipements et outillage',[
+  ['Identifier les matériels et outillages nécessaires à la réalisation de son intervention','Les matériels et outillages choisis sont adaptés à l\u2019intervention|Les règles et limites d\u2019utilisation des matériels et outillages sont recensées'],
+  ['Inventorier les EPI et EPC adaptés à l\u2019intervention','L\u2019inventaire des EPI et EPC est complet et adapté à l\u2019intervention'],
+  ['Identifier les équipements spécifiques (engin de manutention, échafaudage…) nécessaires à l\u2019intervention','Les risques professionnels sont évalués|Les équipements nécessaires à l\u2019intervention sont listés|Les mesures de prévention de santé et sécurité au travail sont recensées|Les habilitations et certifications nécessaires sont identifiées'],
+  ['Informer à l\u2019interne et à l\u2019externe des contraintes liées à l\u2019intervention','La liste des équipements spécifiques est communiquée à l\u2019interne et à l\u2019externe']]],
+ ['C4','b2','Organiser et sécuriser son intervention',[
+  ['Organiser son poste de travail','Les spécificités du chantier sont identifiées|Les anomalies techniques sont repérées et signalées|Le poste de travail est approvisionné en matériels et outillages avec méthode|Le lieu d\u2019activité est restitué quotidiennement conformément aux règles d\u2019hygiène et de sécurité'],
+  ['Sécuriser le poste de travail','Les principes généraux de prévention (PGP) sont appliqués dans le choix des mesures de prévention|Les contraintes propres au poste de travail y compris environnementales sont prises en compte|L\u2019implantation des équipements spécifiques est certifiée'],
+  ['Organiser l\u2019intervention','Les activités sont organisées de manière chronologique et méthodique|Les activités sont (ré)organisées en fonction des aléas']]],
+ ['C5','b2','Réceptionner les approvisionnements',[
+  ['Vérifier la conformité des matériels','Les caractéristiques techniques sont vérifiées|Les quantités sont contrôlées|Les éventuelles anomalies sont consignées'],
+  ['Stocker les matériels','Les accès et les circulations sont préservés|Les conditions de stockage données sont respectées|Les principes de la prévention des risques liés à l\u2019activité physique (PRAP) sont appliqués']]],
+ ['C6','b2','Réaliser une installation en adoptant une attitude écoresponsable',[
+  ['Implanter les matériels et les supports','L\u2019implantation des appareils et supports est conforme aux consignes, aux prescriptions techniques, réglementaires et aux normes|Les fixations sont adaptées à la nature de la paroi, aux charges et aux prescriptions du fabricant'],
+  ['Réaliser les réseaux fluidiques','Les réseaux sont façonnés, posés et raccordés conformément aux consignes, prescriptions et normes|Le travail est soigné, le niveau de qualité attendu est atteint|Les règles de sécurité sont respectées'],
+  ['Réaliser les câblages électriques','Le matériel électrique est câblé et raccordé conformément aux consignes, prescriptions et normes|Le travail est soigné, le niveau de qualité attendu est atteint|Les règles de sécurité sont respectées'],
+  ['Adopter une attitude écoresponsable','Les déchets sont triés et évacués de manière sélective conformément à la réglementation|Le consommable est utilisé sans gaspillage']]],
+ ['C7','b2','Mettre en service une installation',[
+  ['Contrôler la conformité des réalisations sur les réseaux fluidiques et électriques','Les réseaux et les contrôles sont identifiés|Les contrôles des réalisations sont effectués et conformes aux normes en vigueur'],
+  ['Identifier les risques professionnels','Les risques professionnels sont identifiés et permettent une intervention en sécurité'],
+  ['Réaliser les essais de résistance à la pression, d\u2019étanchéité et le tirage à vide','Les modes opératoires sont réalisés et conformes aux règles en vigueur'],
+  ['Prérégler les appareils de régulation et de sécurité','Les préréglages sont réalisés dans le respect des normes et de la réglementation|Les préréglages permettent une mise en service de toute ou partie de l\u2019installation'],
+  ['Effectuer la précharge du réseau fluidique du système','La précharge est réalisée suivant les normes en vigueur|La précharge permet la mise en service de l\u2019installation'],
+  ['Mettre en service l\u2019installation','L\u2019installation fonctionne']]],
+ ['C8','b2','Contrôler, régler et paramétrer l\u2019installation',[
+  ['Compléter la charge du réseau fluidique','La charge est réalisée suivant les normes et la réglementation sur l\u2019environnement|La valeur du sous-refroidissement est correcte suivant les valeurs de la norme'],
+  ['Ajuster les réglages des systèmes de régulation et de sécurité','Les réglages et leur précision permettent le bon fonctionnement du système frigorifique|Le réglage des sécurités est réalisé, justifié et précis'],
+  ['Paramétrer le régulateur','Les paramètres sont identifiés|Le paramétrage assure la fiabilité du système et correspond aux besoins du client'],
+  ['Réaliser les mesures nécessaires pour valider le fonctionnement de l\u2019installation','Les points de mesures sont repérés|Les mesures permettent la validation du fonctionnement du système frigorifique|Les mesures sont réalisées avec précision et méthode|Le fonctionnement de l\u2019installation est optimisé'],
+  ['Assurer la sécurité','Toutes les mesures de prévention des risques pour les biens et les personnes sont appliquées|Les règles de manipulation des fluides et de prise de mesures sont respectées']]],
+ ['C9','b3','Réaliser des opérations de maintenance préventive',[
+  ['Identifier les opérations prédéfinies liées au contrat de maintenance','La collecte des informations nécessaires à l\u2019intervention est complète et exploitable'],
+  ['Analyser l\u2019environnement de travail et les conditions de la maintenance','L\u2019organisation du travail est respectueuse de l\u2019environnement, de la santé et sécurité au travail'],
+  ['Analyser les risques liés à l\u2019intervention','Les risques sont pris en compte pour effectuer l\u2019intervention'],
+  ['Exploiter les données du dossier technique','Les données du dossier technique sont identifiées et exploitées'],
+  ['Exploiter les informations de télémaintenance et celles des applications numériques','Les données de télémaintenance et des applications numériques sont identifiées et exploitées'],
+  ['Vérifier les données de contrôle (indicateurs, voyants…) et repérer les dérives par rapport aux attendus','Les dérives et signes d\u2019anomalies sont détectés'],
+  ['Réaliser les opérations de maintenance préventive d\u2019ordre technique et réglementaire','Le contrôle périodique d\u2019étanchéité est réalisé|Les fluides frigorigènes et caloporteurs sont manipulés conformément aux règles|Les opérations d\u2019ordre technique sont réalisées avec méthode'],
+  ['Réaliser un contrôle visuel de l\u2019état du système','Les éventuels éléments défectueux sont identifiés et l\u2019information est transmise à la hiérarchie|Le système est dans les conditions normales de fonctionnement'],
+  ['Évacuer les déchets','Les déchets sont évacués de façon écoresponsable et conformément aux règles en vigueur']]],
+ ['C10','b3','Réaliser des opérations de maintenance corrective',[
+  ['Établir le constat de défaillance','Les informations délivrées par le système sont relevées|La configuration du système est analysée'],
+  ['Émettre des hypothèses de panne et/ou de dysfonctionnement','Toutes les hypothèses émises sont pertinentes'],
+  ['Effectuer des mesures, contrôles et tests pour valider ou non les hypothèses en sécurité','Les points de mesures, de contrôles, de tests sont correctement choisis et localisés|Les appareils de mesure et de contrôle sont correctement mis en œuvre|Les résultats sont correctement interprétés par rapport aux attendus|La chronologie des tests est méthodique'],
+  ['Identifier le composant défectueux et/ou la cause de la défaillance','L\u2019identification du composant et/ou de la cause de la défaillance est correcte'],
+  ['Vérifier la disponibilité des pièces de rechange, des consommables','Les pièces de rechange et consommables sortis du magasin ou commandés sont conformes'],
+  ['Approvisionner en matériels, équipements et outillages','Le poste de travail est approvisionné en matériels, équipements et outillages'],
+  ['Consigner le système','L\u2019intervention peut se dérouler en toute sécurité|Les EPI et EPC sont adaptés'],
+  ['Effectuer la dépose du composant défectueux','Les fluides frigorigènes et caloporteurs sont manipulés conformément aux règles|Les consignes et procédures sont respectées|La manutention et l\u2019outillage sont mis en œuvre en toute sécurité|Le composant défectueux est déposé et prêt à être recyclé'],
+  ['Installer et régler le composant de remplacement','Le composant est remplacé sans risque pour les personnes et le système'],
+  ['Réaliser les réglages et/ou les paramétrages à l\u2019origine de la défaillance','Les réglages et/ou paramétrages sont conformes au dossier technique'],
+  ['Déconsigner le système','Le système est prêt pour la remise en service'],
+  ['Mettre en service le système','Les fluides sont manipulés conformément aux règles|La mise en service est réalisée avec méthode|Les performances du système sont conformes au dossier technique'],
+  ['Évacuer les déchets','Les déchets sont évacués de façon écoresponsable et conformément aux règles en vigueur']]],
+ ['C11','b3','Consigner et transmettre les informations',[
+  ['Compléter la fiche d\u2019intervention / le bordereau de suivi de déchet dangereux','La fiche d\u2019intervention / le bordereau est complété sans erreurs'],
+  ['Rédiger un rapport de mise en service, un bon d\u2019intervention','Les rapports sont correctement renseignés et exploitables']]],
+ ['C12','b2','Communiquer, rendre compte de son intervention à l\u2019écrit et/ou à l\u2019oral',[
+  ['Échanger avec le client sur le dysfonctionnement de l\u2019installation','Les évènements avant panne sont collectés|Les constats sont pris en compte'],
+  ['Expliquer l\u2019état d\u2019avancement des opérations, leurs contraintes et leurs difficultés','L\u2019état d\u2019avancement est clairement décrit|Les contraintes et les difficultés sont identifiées'],
+  ['Rédiger un compte-rendu, un rapport d\u2019activité','Le compte-rendu est complet et exploitable']]],
+ ['C13','b3','Conseiller le client et/ou l\u2019exploitant du système',[
+  ['Écouter et questionner le client et/ou l\u2019exploitant sur ses besoins','Les besoins de l\u2019exploitant sont identifiés et interprétés'],
+  ['Expliquer le fonctionnement et l\u2019utilisation de l\u2019installation au client et/ou à l\u2019exploitant','Les explications sont correctes et permettent l\u2019utilisation de l\u2019installation'],
+  ['Informer oralement des consignes de sécurité','Les consignes de sécurité sont présentées et détaillées'],
+  ['Proposer une solution technique au client et/ou à l\u2019exploitant','La solution technique proposée est correcte']]]
+];
+function buildMfer(){
+ const competences={},actions={};
+ MFER.forEach(([code,bloc,lib,list],i)=>{const k=i+1,cid='c'+k;competences[cid]={code,bloc,lib,o:k};
+  list.forEach(([l,ind],j)=>{const n=j+1;actions['a'+k+'_'+n]={code:'CP'+k+(k>=11?'0':'')+n,comp:cid,lib:l,el:'',ind:ind.split('|'),o:n}})});
+ return{ref:'mfer',titre:'Bac pro MFER',echelle:'e3',blocs:clone(MFER_BLOCS),competences,actions};
+}
+
+/* ----- Référentiel Technologie cycle 4 ----- */
+const C4_DOMS=[['d1','Pratiquer des démarches scientifiques et technologiques','#3056d3'],['d2','Concevoir, créer, réaliser','#7c4ddb'],['d3','S\u2019approprier des outils et des méthodes','#0e9594'],['d4','Pratiquer des langages','#c2410c'],['d5','Mobiliser des outils numériques','#c0267a'],['d6','Adopter un comportement éthique et responsable','#15803d'],['d7','Se situer dans l\u2019espace et dans le temps','#55657e']];
+const C4_ACTS=[
+ ['CT1.1','d1','Imaginer, synthétiser, formaliser et respecter une procédure, un protocole','Je suis un protocole étape par étape'],
+ ['CT1.2','d1','Mesurer des grandeurs de manière directe ou indirecte','Je mesure une grandeur avec le bon appareil'],
+ ['CT1.3','d1','Rechercher des solutions techniques, expliciter ses choix et les communiquer en argumentant','Je propose une solution et j\u2019explique mon choix'],
+ ['CT1.4','d1','Participer à l\u2019organisation et au déroulement de projets','Je participe à l\u2019organisation du projet'],
+ ['CT2.1','d2','Identifier un besoin et énoncer un problème technique','J\u2019identifie le besoin et le problème à résoudre'],
+ ['CT2.2','d2','Identifier les matériaux, les flux d\u2019énergie et d\u2019information dans un objet','J\u2019identifie matériaux, énergie et information'],
+ ['CT2.3','d2','S\u2019approprier un cahier des charges','Je comprends un cahier des charges'],
+ ['CT2.4','d2','Associer des solutions techniques à des fonctions','J\u2019associe une solution technique à une fonction'],
+ ['CT2.5','d2','Imaginer des solutions en réponse au besoin','J\u2019imagine des solutions au besoin'],
+ ['CT2.6','d2','Réaliser, de manière collaborative, le prototype de tout ou partie d\u2019un objet','Je réalise un prototype en équipe'],
+ ['CT2.7','d2','Imaginer, concevoir et programmer des applications informatiques nomades','Je conçois et programme une application'],
+ ['CT3.1','d3','Exprimer sa pensée à l\u2019aide d\u2019outils de description adaptés','J\u2019explique avec un croquis, un schéma, un tableau'],
+ ['CT3.2','d3','Traduire, avec des outils de représentation numérique, des choix de solutions','Je représente une solution avec un outil numérique'],
+ ['CT3.3','d3','Présenter à l\u2019oral et avec des supports numériques des solutions techniques','Je présente mon travail à l\u2019oral'],
+ ['CT4.1','d4','Décrire la structure et le comportement des objets avec des langages adaptés','Je décris la structure et le fonctionnement d\u2019un objet'],
+ ['CT4.2','d4','Appliquer les principes de l\u2019algorithmique et du codage à un problème simple','J\u2019écris un algorithme ou un programme simple'],
+ ['CT5.1','d5','Simuler numériquement la structure et/ou le comportement d\u2019un objet','Je simule le comportement d\u2019un objet'],
+ ['CT5.2','d5','Organiser, structurer et stocker des ressources numériques','Je range et nomme mes fichiers correctement'],
+ ['CT5.3','d5','Lire, utiliser et produire des représentations numériques d\u2019objets','Je lis et modifie une maquette numérique'],
+ ['CT5.4','d5','Piloter un système connecté localement ou à distance','Je pilote un système connecté'],
+ ['CT5.5','d5','Modifier ou paramétrer le fonctionnement d\u2019un objet communicant','Je paramètre un objet communicant'],
+ ['CT6.1','d6','Développer les bonnes pratiques de l\u2019usage des objets communicants','J\u2019utilise les objets connectés de façon responsable'],
+ ['CT6.2','d6','Analyser l\u2019impact environnemental d\u2019un objet et de ses constituants','J\u2019analyse l\u2019impact environnemental d\u2019un objet'],
+ ['CT6.3','d6','Analyser le cycle de vie d\u2019un objet','J\u2019analyse le cycle de vie d\u2019un objet'],
+ ['CT7.1','d7','Regrouper des objets en familles et lignées','Je classe des objets en familles et lignées'],
+ ['CT7.2','d7','Relier les évolutions technologiques aux inventions et innovations','Je relie une évolution technique à une innovation']
+];
+function buildC4(){
+ const competences={},actions={};
+ C4_DOMS.forEach(([id,lib,c],i)=>{competences[id]={code:'D'+(i+1),bloc:'b1',lib,c,o:i+1}});
+ C4_ACTS.forEach(([code,d,lib,el],i)=>{actions['c'+code.replace(/\D/g,'')]={code,comp:d,lib,el,ind:[],o:i}});
+ return{ref:'c4',titre:'Technologie cycle 4',echelle:'e4',blocs:{b1:{nom:'Technologie cycle 4',court:'Cycle 4',c:'#3056d3',o:1}},competences,actions};
+}
+const PRESETS={mfer:{nom:'Bac pro MFER',desc:'13 compétences, 69 critères · NA / ECA / A',build:buildMfer,classes:['2MFER','1MFER','TMFER']},
+ c4:{nom:'Technologie cycle 4',desc:'26 compétences travaillées · MI / MF / MS / TBM',build:buildC4,classes:['5A','5B','5C','5D','5E','4A','4B','4C','4D','4E','3A','3B','3C','3D','3E','3PM']}};
+function defaultConfig(ref){const p=PRESETS[ref]||PRESETS.mfer;return Object.assign(p.build(),{classes:p.classes.slice(),tps:{},mode:'derniere',trims:{t2:'12-01',t3:'03-01'}})}
+
+/* ===== Stockage : Firebase REST (sans SDK) ou mémoire en mode démo ===== */
+function clone(v){return v==null?null:JSON.parse(JSON.stringify(v))}
+let MEM={};
+const parts=p=>p.split('/').filter(Boolean);
+function memGet(p){let o=MEM;for(const k of parts(p)){if(o==null||typeof o!=='object')return null;o=o[k]}return o===undefined?null:o}
+function memSet(p,v){const a=parts(p);if(!a.length){MEM=v||{};return}let o=MEM;for(let i=0;i<a.length-1;i++){if(typeof o[a[i]]!=='object'||o[a[i]]===null)o[a[i]]={};o=o[a[i]]}const k=a[a.length-1];if(v===null||v===undefined)delete o[k];else o[k]=v}
+const Store={
+ async req(method,p,v){
+  if(DEMO){
+   if(method==='GET')return clone(memGet(p));
+   if(method==='PUT')memSet(p,clone(v));
+   else if(method==='PATCH'){for(const k in v)memSet(p+'/'+k,clone(v[k]))}
+   else if(method==='DELETE')memSet(p,null);
+   return true;
+  }
+  const opt={method};if(v!==undefined)opt.body=JSON.stringify(v);
+  const r=await fetch(`${FB_URL}/${p?ROOT+'/'+p:ROOT}.json`,opt);
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return method==='GET'?await r.json():true;
+ },
+ get(p){return this.req('GET',p)},put(p,v){return this.req('PUT',p,v)},patch(p,v){return this.req('PATCH',p,v)},del(p){return this.req('DELETE',p)}
+};
+
+/* ===== Outils ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const pl=(n,s,p)=>n+' '+(n>1?(p||s+'s'):s);
+const newCodeVal=()=>String(Math.floor(Math.random()*10000)).padStart(4,'0');
+function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast on'+(err?' err':'');clearTimeout(toast.h);toast.h=setTimeout(()=>{t.className='toast'},1900)}
+async function safe(p){try{await p;return true}catch(e){toast('Connexion impossible : modification non enregistrée',true);return false}}
+async function hash(s){const b=new TextEncoder().encode('suivi-comp|'+s);const h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+function download(name,content,type){const b=new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+const today=()=>new Date().toISOString().slice(0,10);
+const fmt1=v=>v.toFixed(1).replace('.',',');
+const sgn=v=>(v>0?'+':'')+fmt1(v);
+
+const LOGO='<span class="logo"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="#ff9a9c"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#ffc977"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#86dcae"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#fff"/></svg></span>';
+const ico=d=>`<svg viewBox="0 0 24 24">${d}</svg>`;
+const ICO={
+ dash:ico('<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'),
+ eval:ico('<path d="M9 11l3 3 8-8"/><path d="M20 12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h11"/>'),
+ users:ico('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.9.7 3.1 2.5 3.5 5.2"/>'),
+ tp:ico('<path d="M9 3h6M10 3v6l-5.5 9.5A1.6 1.6 0 0 0 5.9 21h12.2a1.6 1.6 0 0 0 1.4-2.5L14 9V3"/><path d="M7.5 15h9"/>'),
+ comp:ico('<path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11M3.5 18l1.5 1.5L7.5 17"/>'),
+ gear:ico('<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>'),
+ ref:ico('<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>'),
+ out:ico('<path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4"/><path d="M10 8l-4 4 4 4M6 12h10"/>')
+};
+
+/* ===== État ===== */
+const S={v:'home',cfg:undefined,err:false,classe:null,eleves:null,eid:null,mine:null,tp:null,stab:'tp',code:'',msg:'',fails:0,lock:0,openInd:{},openSC:{},
+ admin:false,db:null,a:'dash',ac:null,atp:null,cell:null,edTp:null,edAct:null,edComp:null,confirm:null,ficheEid:null,fsy:null,pendingImport:null,per:0,openC:{},setupRef:'mfer'};
+
+/* ===== Accès au référentiel ===== */
+const LV=()=>ECH[(S.cfg&&S.cfg.echelle)||'e3']||ECH.e3;
+const NL=()=>LV().length;
+const L=n=>LV()[n-1]||{s:'',nom:'',el:''};
+const lvls=()=>LV().map((_,i)=>i+1);
+const OK=3;
+function normCfg(){
+ const c=S.cfg;if(!c)return false;let mig=false;
+ if(!c.actions&&c.competences&&Object.values(c.competences).some(x=>x&&x.dom)){
+  const b=buildC4();c.actions={};
+  Object.entries(c.competences).forEach(([id,x])=>{c.actions[id]={code:x.code,comp:x.dom,lib:x.lib,el:x.el||'',ind:[],o:x.o||0}});
+  Object.assign(c,{competences:b.competences,blocs:b.blocs,echelle:'e4',ref:'c4',titre:b.titre});delete c.domaines;
+  Object.values(c.tps||{}).forEach(t=>{if(t&&t.comps&&!t.acts){t.acts=t.comps;delete t.comps}});mig=true;
+ }
+ c.classes=c.classes||[];c.tps=c.tps||{};c.blocs=c.blocs||{};c.competences=c.competences||{};c.actions=c.actions||{};
+ c.echelle=c.echelle||'e3';c.mode=c.mode||'derniere';c.trims=c.trims||{t2:'12-01',t3:'03-01'};c.titre=c.titre||'';c.ref=c.ref||'mfer';
+ Object.values(c.actions).forEach(a=>{if(!Array.isArray(a.ind))a.ind=a.ind?[].concat(a.ind):[]});
+ return mig;
+}
+const blocsSorted=()=>Object.entries(S.cfg.blocs||{}).sort((a,b)=>(a[1].o||0)-(b[1].o||0)||a[0].localeCompare(b[0]));
+const compsSorted=()=>Object.entries(S.cfg.competences||{}).sort((a,b)=>(a[1].o||0)-(b[1].o||0));
+function sortAids(ids){const A=S.cfg.actions,C=S.cfg.competences;return [...new Set(ids)].filter(id=>A[id]&&C[A[id].comp]).sort((x,y)=>((C[A[x].comp].o||0)-(C[A[y].comp].o||0))||((A[x].o||0)-(A[y].o||0)))}
+const allAids=()=>sortAids(Object.keys(S.cfg.actions));
+const tpActs=t=>sortAids((t&&t.acts)||[]);
+const compColor=cid=>{const c=S.cfg.competences[cid]||{};return c.c||((S.cfg.blocs||{})[c.bloc]||{}).c||'#55657e'};
+function groupByComp(aids){const g=[];let cur=null;aids.forEach(a=>{const cid=S.cfg.actions[a].comp;if(!cur||cur[0]!==cid){cur=[cid,[]];g.push(cur)}cur[1].push(a)});return g}
+function byBloc(groups){const m={};groups.forEach(g=>{const b=S.cfg.competences[g[0]].bloc||'_';(m[b]=m[b]||[]).push(g)});
+ const order=blocsSorted().map(x=>x[0]).concat(Object.keys(m).filter(k=>!S.cfg.blocs[k]));return order.filter(b=>m[b]).map(b=>[b,m[b]])}
+const blocName=b=>(S.cfg.blocs[b]||{}).nom||'Autres';
+const blocColor=b=>(S.cfg.blocs[b]||{}).c||'#55657e';
+const validTid=t=>t==='_dir'||t==='_self'||!!(S.cfg.tps&&S.cfg.tps[t]);
+
+/* ===== Calculs ===== */
+function consol(E,aid,rg){
+ const from=rg?rg[0]:0,to=rg?rg[1]:Infinity;let best=0,last=0,lt=-1;
+ for(const tid in E||{}){if(!validTid(tid))continue;const x=E[tid]&&E[tid][aid];if(!x||!x.p)continue;const t=x.tq||0;if(t<from||t>=to)continue;if(x.p>best)best=x.p;if(t>lt){lt=t;last=x.p}}
+ return S.cfg.mode==='meilleure'?best:last;
+}
+function lastAuto(E,aid){let v=0,lt=-1;for(const tid in E||{}){if(!validTid(tid))continue;const x=E[tid]&&E[tid][aid];if(x&&x.a&&(x.ta||0)>lt){lt=x.ta||0;v=x.a}}return v}
+function note20(vals){const v=vals.filter(Boolean);if(!v.length)return null;const N=NL();return v.reduce((s,n)=>s+(n-1)/(N-1),0)/v.length*20}
+function syOf(ts){const d=new Date(ts);return d.getMonth()>=7?d.getFullYear():d.getFullYear()-1}
+function mdDate(sy,md){const[m,d]=String(md).split('-').map(Number);return new Date(m>=8?sy:sy+1,m-1,d).getTime()}
+function range(sy,t){if(!t)return null;const T=S.cfg.trims,a=new Date(sy,7,1).getTime(),b=mdDate(sy,T.t2),c=mdDate(sy,T.t3),e=new Date(sy+1,7,1).getTime();return t===1?[a,b]:t===2?[b,c]:[c,e]}
+const CUR_SY=syOf(Date.now());
+const syLabel=sy=>sy+'-'+(sy+1);
+function curTri(){const n=Date.now();return [1,2,3].find(t=>{const r=range(CUR_SY,t);return n>=r[0]&&n<r[1]})||1}
+const perRange=()=>S.per?range(CUR_SY,S.per):null;
+const perLabel=()=>S.per?'Trimestre '+S.per:'Bilan';
+
+/* ===== Composants ===== */
+const brand=(t,s)=>`<div class="brand">${LOGO}<div><h1>${esc(t)}</h1>${s?`<div class="sub">${esc(s)}</div>`:''}</div></div>`;
+const backBtn=(to,l='Retour')=>`<button class="back" data-act="back" data-to="${to}">&larr; ${l}</button>`;
+const gauge=n=>{const N=NL();return `<span class="gauge">${lvls().map(i=>`<i class="${i<=n?'f':''}" style="height:${Math.round(i/N*100)}%"></i>`).join('')}</span>`};
+function ring(p){const r=46,C=2*Math.PI*r;return `<svg width="118" height="118" viewBox="0 0 110 110"><circle cx="55" cy="55" r="${r}" fill="none" style="stroke:#e6e9f0" stroke-width="12"/><circle cx="55" cy="55" r="${r}" fill="none" style="stroke:var(--n3)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(C*p).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 55 55)"/><text x="55" y="62" text-anchor="middle" font-size="22" font-weight="900" style="fill:var(--ink)" font-family="Nunito,sans-serif">${Math.round(p*100)}%</text></svg>`}
+const legend=()=>`<div class="legend">${lvls().map(n=>`<span><i class="sw s${n}"></i>${L(n).s} : ${L(n).nom}</span>`).join('')}</div>`;
+const lvTag=(n,cls='mini')=>`<span class="${cls} c${n||0}" title="${n?esc(L(n).nom):'Non évalué'}">${n?L(n).s:'–'}</span>`;
+function askBtn(key,label,cls='ghost danger'){
+ if(S.confirm===key)return `<span class="confirm">Confirmer ? <button class="btn sm danger" data-act="ok" data-k="${esc(key)}">Oui</button><button class="btn sm ghost" data-act="cancel">Non</button></span>`;
+ return `<button class="btn sm ${cls}" data-act="ask" data-k="${esc(key)}">${label}</button>`}
+function stack(k,tot){return `<div class="stack">${lvls().map(l=>k[l]?`<i style="width:${k[l]/tot*100}%;background:var(--n${l})" title="${esc(L(l).nom)} : ${k[l]}"></i>`:'').join('')}</div>`}
+const NIV_ORDER=['6e','5e','4e','3e','Seconde','Première','Terminale','Autres'];
+function nivKey(c){if(/^2/.test(c))return 'Seconde';if(/^1/.test(c))return 'Première';if(/^T/i.test(c))return 'Terminale';const m=String(c).match(/^([3-6])/);return m?m[1]+'e':'Autres'}
+function groupClasses(cl){const g={};cl.forEach(c=>{const k=nivKey(c);(g[k]=g[k]||[]).push(c)});return NIV_ORDER.filter(k=>g[k]).map(k=>[k,g[k]])}
+
+/* ===== Rendu ===== */
+function render(){
+ const V={home:vHome,noms:vNoms,code:vCode,eleve:vEleve,login:vLogin,admin:vAdmin}[S.v];
+ $('#app').innerHTML=V();
+ if(S.v==='login'){const p=$('#pw');if(p&&!$('#pw2'))p.focus()}
+}
+
+/* ----- Élève ----- */
+function vHome(){
+ let body;
+ if(S.err)body='<div class="card empty">Connexion à la base impossible. Vérifie le réseau et les règles Firebase, puis recharge la page.</div>';
+ else if(S.cfg===undefined)body='<p class="sub">Chargement…</p>';
+ else if(!S.cfg)body='<div class="card empty">L\u2019outil n\u2019est pas encore configuré. Le professeur doit ouvrir l\u2019espace professeur.</div>';
+ else body=groupClasses(S.cfg.classes).map(([n,l])=>`<div class="niv-title">${esc(n)}</div><div class="cgrid">${l.map(c=>`<button class="cbtn" data-act="pick-classe" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div>`).join('');
+ return `<div class="wrap">${brand('Mes compétences',S.cfg&&S.cfg.titre?S.cfg.titre+' · choisis ta classe':'Choisis ta classe')}${body}<div class="foot"><button class="btn ghost sm" data-act="go-admin">Espace professeur</button></div></div>`;
+}
+function vNoms(){
+ const l=S.eleves?Object.entries(S.eleves).sort((a,b)=>(a[1].nom+' '+a[1].prenom).localeCompare(b[1].nom+' '+b[1].prenom,'fr')):null;
+ const body=!l?'<p class="sub">Chargement…</p>':l.length?`<div class="nlist">${l.map(([id,e])=>`<button class="nbtn" data-act="pick-eleve" data-id="${esc(id)}"><b>${esc(e.nom)}</b> ${esc(e.prenom)}</button>`).join('')}</div>`:'<div class="card empty">Aucun élève dans cette classe pour le moment.</div>';
+ return `<div class="wrap">${backBtn('home')}${brand('Classe '+S.classe,'Clique sur ton nom')}${body}</div>`;
+}
+function vCode(){
+ const e=S.eleves[S.eid],locked=Date.now()<S.lock;
+ const k=n=>`<button class="key" data-act="key" data-k="${n}">${n}</button>`;
+ return `<div class="wrap narrow">${backBtn('noms')}${brand(e.prenom+' '+e.nom,'Tape ton code secret')}
+ <div class="dots">${[0,1,2,3].map(i=>`<span class="dot ${i<S.code.length?'on':''}"></span>`).join('')}</div>
+ <div class="msg err">${locked?`Trop d\u2019essais. Attends ${Math.ceil((S.lock-Date.now())/1000)} s.`:esc(S.msg)}</div>
+ <div class="pad">${[1,2,3,4,5,6,7,8,9].map(k).join('')}<button class="key sm" data-act="key" data-k="del">Effacer</button>${k(0)}<span></span></div></div>`;
+}
+function myTps(){return Object.entries(S.cfg.tps||{}).filter(([,t])=>t.actif!==false&&(t.classes||[]).includes(S.classe)).sort((a,b)=>(b[1].cree||0)-(a[1].cree||0))}
+function vEleve(){
+ const e=S.eleves[S.eid];
+ const head=`<div class="top"><div><div class="hello">Bonjour ${esc(e.prenom)}</div><div class="sub">${esc(e.nom)} · ${esc(S.classe)}</div></div><button class="btn ghost" data-act="logout">Quitter</button></div>`;
+ if(!S.mine)return `<div class="wrap">${head}<p class="sub">Chargement…</p></div>`;
+ const tabs=`<div class="tabs"><button class="tab ${S.stab==='tp'?'on':''}" data-act="stab" data-t="tp">Mes TP</button><button class="tab ${S.stab==='prog'?'on':''}" data-act="stab" data-t="prog">Mes compétences</button></div>`;
+ const body=S.stab==='prog'?vProg():(S.tp&&S.cfg.tps[S.tp]?vTpEleve():vTpList());
+ return `<div class="wrap">${head}${tabs}${body}</div>`;
+}
+function vTpList(){
+ const Lt=myTps();if(!Lt.length)return '<div class="card empty">Aucun TP ouvert pour le moment.</div>';
+ return `<div class="tpgrid">${Lt.map(([id,t])=>{const as=tpActs(t),E=S.mine[id]||{};
+  const a=as.filter(c=>E[c]&&E[c].a).length,p=as.filter(c=>E[c]&&E[c].p).length,done=a===as.length&&a;
+  const cs=[...new Set(as.map(x=>S.cfg.competences[S.cfg.actions[x].comp].code))];
+  return `<button class="tpcard" data-act="open-tp" data-id="${esc(id)}"><div class="tpt">${esc(t.titre)}</div><div class="sub">${cs.join(' · ')} · ${pl(as.length,'critère')}</div>
+  <div class="prog"><i style="width:${pct(a,as.length)}%;background:var(--pr)"></i></div>
+  <div class="tpm"><span class="${done?'ok':''}">${done?'Auto-évaluation faite':`Auto-évaluation : ${a}/${as.length}`}</span><span>Validé : ${p}/${as.length}</span></div></button>`}).join('')}</div>`;
+}
+function actCard(aid,x){
+ const A=S.cfg.actions[aid],open=!!S.openInd[aid],ind=A.ind||[];
+ return `<div class="ccard"><div class="chead"><span class="code">${esc(A.code)}</span>${ind.length?`<button class="crit ${open?'on':''}" data-act="ind" data-a="${esc(aid)}">${open?'Masquer les critères':'Critères de réussite'}</button>`:''}</div>
+ <div class="cel">${esc(A.el||A.lib)}</div>${open?`<ul class="ind">${ind.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:''}
+ <div class="lvls n${NL()}">${lvls().map(n=>`<button class="lvl l${n} ${x.a===n?'on':''}" data-act="auto" data-c="${esc(aid)}" data-n="${n}">${gauge(n)}<span>${esc(L(n).el)}</span></button>`).join('')}</div>
+ <div class="prof">Avis du professeur : ${x.p?`<span class="badge b${x.p}">${esc(L(x.p).nom)}</span>`:'<span class="badge b0">en attente</span>'}</div></div>`;
+}
+function vTpEleve(){
+ const t=S.cfg.tps[S.tp],E=S.mine[S.tp]||{};
+ return `<button class="back" data-act="close-tp">&larr; Mes TP</button><h2 class="tph">${esc(t.titre)}</h2><div class="sub">Pour chaque critère, choisis ce qui te correspond.</div>
+ ${groupByComp(tpActs(t)).map(([cid,as])=>{const C=S.cfg.competences[cid];return `<div class="cgroup"><div class="cghead"><span class="chip" style="background:${compColor(cid)}">${esc(C.code)}</span><b>${esc(C.lib)}</b></div>${as.map(a=>actCard(a,E[a]||{})).join('')}</div>`}).join('')}`;
+}
+function vProg(){
+ const E=S.mine,aids=allAids();
+ if(!aids.length)return '<div class="card empty">Le référentiel est vide.</div>';
+ const V={},M={},cnt=Array(NL()+1).fill(0);aids.forEach(a=>{V[a]=consol(E,a,null);M[a]=lastAuto(E,a);cnt[V[a]]++});
+ const ok=aids.filter(a=>V[a]>=OK).length,me=aids.filter(a=>M[a]).length;
+ const groups=groupByComp(aids),allOpen=groups.every(([c])=>S.openSC[c]);
+ const row=a=>{const A=S.cfg.actions[a],open=!!S.openInd[a],ind=A.ind||[];
+  return `<div class="arow3"><span class="code">${esc(A.code)}</span><div><div class="al">${esc(A.el||A.lib)}</div>${ind.length?`<button class="crit sm ${open?'on':''}" data-act="ind" data-a="${esc(a)}">${open?'Masquer les critères':'Critères de réussite'}</button>`:''}${open?`<ul class="ind">${ind.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:''}</div>
+  <div class="who"><span class="lab">Moi</span><span class="seg big">${lvls().map(n=>`<button class="sg c${n} ${M[a]===n?'on':''}" data-act="self" data-a="${esc(a)}" data-n="${n}">${esc(L(n).el)}</button>`).join('')}</span></div>
+  <div class="who"><span class="lab">Professeur</span>${V[a]?`<span class="badge b${V[a]}">${esc(L(V[a]).nom)}</span>`:'<span class="badge b0">pas encore évalué</span>'}</div></div>`};
+ return `<div class="card progtop">${ring(ok/aids.length)}<div><div class="big">${ok} sur ${pl(aids.length,'critère')} acquis</div>
+ <div class="legend">${lvls().slice().reverse().map(n=>`<span><i class="sw s${n}"></i>${esc(L(n).nom)} : ${cnt[n]}</span>`).join('')}<span><i class="sw s0"></i>Pas encore évalué : ${cnt[0]}</span></div>
+ <div class="sub" style="margin-top:8px">Tu t\u2019es évalué sur ${me} critère${me>1?'s':''}.</div></div></div>
+ <div class="bar" style="margin-top:14px"><div class="sub">Ouvre une compétence, puis évalue-toi sur chaque critère.</div><span class="sp"></span><button class="btn sm ghost" data-act="sc-all">${allOpen?'Tout replier':'Tout déplier'}</button></div>
+ ${byBloc(groups).map(([b,gs])=>`<div class="dtitle"><i style="background:${blocColor(b)}"></i>${esc(blocName(b))}</div>${gs.map(([cid,as])=>{const C=S.cfg.competences[cid],open=!!S.openSC[cid],okc=as.filter(a=>V[a]>=OK).length,mc=as.filter(a=>M[a]).length;
+  return `<div class="cmp"><button class="cmph" data-act="scomp" data-c="${esc(cid)}"><span class="chip" style="background:${compColor(cid)}">${esc(C.code)}</span><span class="cmpl">${open?'&#9662;':'&#9656;'} ${esc(C.lib)}</span><span class="cmpn" title="Auto-évalués / acquis">Moi ${mc}/${as.length} · Acquis ${okc}/${as.length}</span></button>
+  <div class="segbar">${as.map(a=>`<i class="c${V[a]}" title="${esc(S.cfg.actions[a].code)}"></i>`).join('')}</div>
+  ${open?as.map(row).join(''):''}</div>`}).join('')}`).join('')}`;
+}
+async function setSelf(aid,n){
+ const E=S.mine;E._self=E._self||{};const x=E._self[aid]=E._self[aid]||{};
+ if(lastAuto(E,aid)===n)return;x.a=n;x.ta=Date.now();render();
+ if(await safe(Store.patch(`evals/${S.classe}/${S.eid}/_self/${aid}`,{a:n,ta:x.ta})))toast('Enregistré');
+}
+
+/* ----- Connexion prof ----- */
+function vLogin(){
+ const first=!S.cfg;
+ return `<div class="wrap narrow">${backBtn('home')}${brand('Espace professeur',first?'Première connexion : configure l\u2019outil':'Saisis ton mot de passe')}<div class="card">
+ ${first?`<div class="field"><label>Référentiel</label><div class="mode">${Object.entries(PRESETS).map(([k,p])=>`<button class="mopt ${S.setupRef===k?'on':''}" data-act="setup-ref" data-r="${k}"><b>${esc(p.nom)}</b><span class="sub">${esc(p.desc)}</span></button>`).join('')}</div></div>`:''}
+ <div class="field"><label>${first?'Crée ton mot de passe':'Mot de passe'}</label><input class="inp" type="password" id="pw" data-enter="admin-login" autocomplete="current-password"></div>
+ ${first?'<div class="field"><label>Confirmer le mot de passe</label><input class="inp" type="password" id="pw2" data-enter="admin-login"></div>':''}
+ <div class="msg err">${esc(S.msg)}</div><button class="btn" data-act="admin-login">${first?'Créer et entrer':'Entrer'}</button>
+ ${DEMO?'<p class="sub">Démo : mot de passe « demo »</p>':''}</div></div>`;
+}
+
+/* ----- Admin ----- */
+const ATABS=[['dash','Tableau de bord','dash'],['eval','Évaluer','eval'],['eleves','Élèves','users'],['tps','TP','tp'],['ref','Référentiel','comp'],['params','Paramètres','gear']];
+function vAdmin(){
+ const main={dash:aDash,eval:aEval,eleves:aEleves,tps:aTps,ref:aRef,params:aParams}[S.a]();
+ return `<div class="adm"><nav class="side"><div class="sbrand">${LOGO}<div><b>Compétences</b><div class="sub">${esc(S.cfg.titre||'Espace professeur')}</div></div></div>
+ ${ATABS.map(([k,l,i])=>`<button class="it ${S.a===k?'on':''}" data-act="atab" data-t="${k}">${ICO[i]}<span>${l}</span></button>`).join('')}
+ <div class="sp"></div><button class="it" data-act="refresh">${ICO.ref}<span>Actualiser</span></button><button class="it" data-act="logout-admin">${ICO.out}<span>Quitter</span></button></nav>
+ <main class="main">${main}</main></div>${S.ficheEid?vFiche():''}${S.cell&&S.a==='eval'?vPicker():''}`;
+}
+const classSel=()=>`<select class="inp" data-chg="ac">${S.cfg.classes.map(c=>`<option value="${esc(c)}" ${c===S.ac?'selected':''}>${esc(c)} (${elevesOf(c).length})</option>`).join('')}</select>`;
+const aHead=(t,x='')=>`<div class="ahead"><h2>${t}</h2><div class="tools">${x}</div></div>`;
+function elevesOf(c){return Object.entries((S.db&&S.db.eleves||{})[c]||{}).sort((a,b)=>(a[1].nom+' '+a[1].prenom).localeCompare(b[1].nom+' '+b[1].prenom,'fr'))}
+function evOf(c,eid){const e=S.db.evals;return (e[c]&&e[c][eid])||{}}
+function tpsOf(c){return Object.entries(S.cfg.tps||{}).filter(([,t])=>(t.classes||[]).includes(c)).sort((a,b)=>(b[1].cree||0)-(a[1].cree||0))}
+
+function stats(c,rg){
+ const els=elevesOf(c),tps=tpsOf(c),set=new Set(tps.flatMap(([,t])=>tpActs(t))),evd=new Set(),ev=S.db.evals[c]||{};
+ for(const e in ev)for(const t in ev[e]){if(!validTid(t))continue;for(const a in ev[e][t])if(ev[e][t][a]&&ev[e][t][a].p){set.add(a);evd.add(a)}}
+ const aids=sortAids([...set]),M={},gaps={};let nEv=0,ok=0,pend=0,nP=0;
+ els.forEach(([e])=>{const E=evOf(c,e);M[e]={};aids.forEach(a=>{const v=consol(E,a,rg);M[e][a]=v;if(v){nEv++;if(v>=OK)ok++}});
+  for(const t in E){if(!validTid(t))continue;for(const a in E[t]){const x=E[t][a];if(!x)continue;if(x.a&&!x.p&&t[0]!=='_')pend++;if(x.p)nP++;if(x.a&&x.p)(gaps[e]=gaps[e]||[]).push(x.a-x.p)}}});
+ return{els,tps,aids,M,nEv,ok,pend,nP,gaps,evd};
+}
+const perChips=()=>`<div class="per">${[0,1,2,3].map(t=>`<button class="pchip ${S.per===t?'on':''}" data-act="per" data-t="${t}">${t?'T'+t:'Bilan'}</button>`).join('')}</div>`;
+
+function aDash(){
+ const c=S.ac,rg=perRange(),st=stats(c,rg);
+ const tiles=S.cfg.classes.filter(k=>elevesOf(k).length).map(k=>{const s=k===c?st:stats(k,rg),p=pct(s.ok,s.nEv);
+  return `<button class="ctile ${k===c?'on':''}" data-act="pick-ac" data-c="${esc(k)}"><b>${esc(k)}</b><span>${s.nEv?p+' % acquis':'—'}</span><i style="width:${p}%"></i></button>`}).join('');
+ const head=aHead('Tableau de bord',perChips()+classSel())+(tiles?`<div class="ctiles">${tiles}</div>`:'');
+ if(!st.els.length)return head+'<div class="card empty">Aucun élève dans cette classe. Ajoute-les dans l\u2019onglet Élèves.</div>';
+ if(!st.aids.length)return head+'<div class="card empty">Rien à afficher : crée un TP pour cette classe ou positionne un élève depuis sa fiche.</div>';
+ const C=S.cfg.competences,A=S.cfg.actions,n=st.els.length,total=allAids().length;
+ const notes=st.els.map(([e])=>note20(st.aids.map(a=>st.M[e][a]))).filter(v=>v!==null);
+ const moy=notes.length?notes.reduce((a,b)=>a+b,0)/notes.length:null;
+ const kpis=`<div class="kpis"><div class="kpi"><div class="v">${n}</div><div class="k">Élèves</div></div>
+  <div class="kpi"><div class="v" style="color:var(--n3)">${pct(st.ok,st.nEv)} %</div><div class="k">Critères acquis · ${perLabel()}</div></div>
+  <div class="kpi"><div class="v">${moy===null?'—':fmt1(moy)}</div><div class="k">Note indicative moyenne /20</div></div>
+  <div class="kpi"><div class="v">${st.evd.size}<span style="font-size:16px;color:var(--mu)">/${total}</span></div><div class="k">Couverture du référentiel</div></div>
+  <button class="kpi ${st.pend?'warn':''}" data-act="atab" data-t="eval"><div class="v">${st.pend}</div><div class="k">Auto-évaluations à valider</div></button></div>`;
+ const groups=groupByComp(st.aids);
+ const bars=groups.map(([cid,as])=>{const k=Array(NL()+1).fill(0);st.els.forEach(([e])=>as.forEach(a=>k[st.M[e][a]]++));const tot=n*as.length,ev=tot-k[0],okk=k.slice(OK).reduce((x,y)=>x+y,0),open=!!S.openC[cid];
+  let h=`<button class="brow" data-act="opencomp" data-c="${esc(cid)}"><div class="bl" title="${esc(C[cid].lib)}"><b>${open?'&#9662;':'&#9656;'} ${esc(C[cid].code)}</b>${esc(C[cid].lib)}</div>${stack(k,tot)}<div class="bp">${ev?pct(okk,ev)+' %':'—'}</div></button>`;
+  if(open)h+=as.map(a=>{const k2=Array(NL()+1).fill(0);st.els.forEach(([e])=>k2[st.M[e][a]]++);const ev2=n-k2[0],ok2=k2.slice(OK).reduce((x,y)=>x+y,0);
+   return `<div class="brow subr"><div class="bl" title="${esc(A[a].lib)}"><b>${esc(A[a].code)}</b>${esc(A[a].lib)}</div>${stack(k2,n)}<div class="bp">${ev2?pct(ok2,ev2)+' %':'—'}</div></div>`}).join('');
+  return h}).join('');
+ const hm=`<div class="scroll"><table class="hm"><thead><tr><th></th>${groups.map(([cid])=>`<th title="${esc(C[cid].lib)}">${esc(C[cid].code)}</th>`).join('')}<th>/20</th></tr></thead><tbody>
+ ${st.els.map(([e,el])=>{const nt=note20(st.aids.map(a=>st.M[e][a]));return `<tr><td class="nm"><button class="nmb" data-act="fiche" data-id="${esc(e)}">${esc(el.nom)} ${esc(el.prenom)}</button></td>${groups.map(([cid,as])=>{const v=as.map(a=>st.M[e][a]).filter(Boolean);
+  if(!v.length)return '<td><span class="hc c0">—</span></td>';const avg=Math.round(v.reduce((x,y)=>x+y,0)/v.length),p=pct(v.filter(x=>x>=OK).length,v.length);
+  return `<td><span class="hc c${avg}" title="${esc(el.prenom)} — ${esc(C[cid].code)} : ${p} % acquis sur ${v.length} critère(s) évalué(s)">${p}%</span></td>`}).join('')}
+  <td><b>${nt===null?'—':fmt1(nt)}</b></td></tr>`}).join('')}</tbody></table></div>`;
+ const aide=st.els.map(([e,el])=>{const v=st.aids.map(a=>st.M[e][a]).filter(Boolean),na=v.filter(x=>x===1).length,nt=note20(v);
+  return{e,el,na,nt,ok:na>=3||(v.length>=3&&nt!==null&&nt<8)}}).filter(x=>x.ok).sort((a,b)=>(a.nt||0)-(b.nt||0));
+ const aideH=aide.length?aide.map(x=>`<div class="lrow"><button class="nmb" data-act="fiche" data-id="${esc(x.e)}">${esc(x.el.nom)} ${esc(x.el.prenom)}</button><span><span class="badge b1">${x.na} ${L(1).s}</span> <span class="badge b0">${x.nt===null?'—':fmt1(x.nt)}/20</span></span></div>`).join(''):'<div class="sub">Aucun élève en difficulté repéré.</div>';
+ const gp=Object.entries(st.gaps).filter(([,g])=>g.length>=2).map(([e,g])=>({e,el:(S.db.eleves[c]||{})[e],m:g.reduce((a,b)=>a+b,0)/g.length})).filter(x=>x.el&&Math.abs(x.m)>=0.6).sort((a,b)=>b.m-a.m);
+ const gapH=gp.length?gp.map(x=>`<div class="lrow"><button class="nmb" data-act="fiche" data-id="${esc(x.e)}">${esc(x.el.nom)} ${esc(x.el.prenom)}</button><span class="badge ${x.m>0?'b2':'b4'}">${x.m>0?'Se surestime':'Se sous-estime'} ${sgn(x.m)}</span></div>`).join(''):'<div class="sub">Auto-évaluations cohérentes avec tes évaluations.</div>';
+ const miss=allAids().filter(a=>!st.evd.has(a)),mg=groupByComp(miss);
+ const covH=miss.length?mg.map(([cid,as])=>`<div class="lrow" style="display:block"><b>${esc(C[cid].code)}</b> <span class="sub">${esc(C[cid].lib)}</span><div class="cov">${as.map(a=>`<span title="${esc(A[a].lib)}">${esc(A[a].code)}</span>`).join('')}</div></div>`).join(''):'<div class="sub">Tout le référentiel a été évalué au moins une fois.</div>';
+ const tpH=st.tps.length?st.tps.map(([tid,t])=>{const as=tpActs(t),tot=n*as.length;let a=0,p=0;st.els.forEach(([e])=>{const E=evOf(c,e)[tid]||{};as.forEach(x=>{if(E[x]&&E[x].a)a++;if(E[x]&&E[x].p)p++})});
+  return `<div class="tpp"><div class="tn">${esc(t.titre)}${t.actif===false?' <span class="badge b0">fermé</span>':''}</div>
+  <div class="sub">Auto-évaluation ${pct(a,tot)} %</div><div class="prog"><i style="width:${pct(a,tot)}%;background:var(--pr)"></i></div>
+  <div class="sub">Validation professeur ${pct(p,tot)} %</div><div class="prog"><i style="width:${pct(p,tot)}%;background:var(--n3)"></i></div></div>`}).join(''):'<div class="sub">Aucun TP pour cette classe.</div>';
+ return head+kpis+`<div class="card sec"><h3>Acquisition par compétence · ${perLabel()}</h3><div class="sub">Clique sur une compétence pour voir le détail de ses critères</div>${legend()}${bars}</div>
+ <div class="card sec"><h3>Carte de la classe</h3><div class="sub">Pourcentage de critères acquis par compétence · clique sur un nom pour ouvrir la fiche</div>${hm}</div>
+ <div class="cols sec"><div class="card"><h3>Élèves à accompagner</h3><div class="sub">Au moins 3 ${esc(L(1).s)}, ou note indicative sous 8/20</div>${aideH}</div>
+ <div class="card"><h3>Écarts d\u2019auto-évaluation</h3><div class="sub">Écart moyen entre l\u2019élève et toi</div>${gapH}</div></div>
+ <div class="cols sec"><div class="card"><h3>Critères jamais évalués (${miss.length})</h3><div class="sub">À planifier dans les prochains TP</div>${covH}</div>
+ <div class="card"><h3>Avancement des TP</h3>${tpH}</div></div>`;
+}
+
+function vFiche(){
+ const c=S.ac,eid=S.ficheEid,el=(S.db.eleves[c]||{})[eid];if(!el)return '';
+ const E=evOf(c,eid),sy=S.fsy||CUR_SY,aids=allAids(),C=S.cfg.competences,A=S.cfg.actions;
+ const years=new Set([CUR_SY]);for(const t in E)for(const a in E[t]||{}){const x=E[t][a];if(x&&x.tq)years.add(syOf(x.tq))}
+ const ys=[...years].sort((a,b)=>b-a);
+ const B={};aids.forEach(a=>B[a]=consol(E,a,null));
+ const T={1:{},2:{},3:{}};[1,2,3].forEach(t=>{const r=range(sy,t);aids.forEach(a=>T[t][a]=consol(E,a,r))});
+ const ct=sy===CUR_SY?curTri():0;
+ const sum=[1,2,3,0].map(t=>{const vals=aids.map(a=>t?T[t][a]:B[a]).filter(Boolean),nt=note20(vals),ok=vals.filter(v=>v>=OK).length;
+  return `<div class="fs ${t&&t===ct?'cur':''}"><b>${t?'Trimestre '+t:'Bilan global'}</b><div class="v">${vals.length?pct(ok,vals.length)+' %':'—'}</div><div class="n">${vals.length?`${ok}/${vals.length} acquis · ${fmt1(nt)}/20`:'aucune évaluation'}</div></div>`}).join('');
+ const rows=byBloc(groupByComp(aids)).map(([b,gs])=>`<tr class="bh"><td colspan="7" style="color:${blocColor(b)}">${esc(blocName(b))}</td></tr>`+gs.map(([cid,as])=>{const okc=as.filter(a=>B[a]>=OK).length;
+  return `<tr class="ch"><td colspan="5"><span class="chip" style="background:${compColor(cid)}">${esc(C[cid].code)}</span> ${esc(C[cid].lib)}</td><td colspan="2" style="text-align:right" class="sub">${okc}/${as.length} acquis</td></tr>`+
+  as.map(a=>`<tr><td class="cd">${esc(A[a].code)}</td><td title="${esc((A[a].ind||[]).join(' • '))}">${esc(A[a].lib)}</td>${[1,2,3].map(t=>`<td class="ct">${lvTag(T[t][a])}</td>`).join('')}<td class="ct">${lvTag(lastAuto(E,a))}</td><td class="ct"><span class="seg">${lvls().map(n=>`<button class="sg c${n} ${B[a]===n?'on':''}" data-act="dir" data-a="${esc(a)}" data-n="${n}" title="Positionner : ${esc(L(n).nom)}">${L(n).s}</button>`).join('')}</span></td></tr>`).join('')}).join('')).join('');
+ return `<div class="ov" data-act="fiche-close"><div class="modal" data-act="noop">
+ <div class="ahead"><div><h2>${esc(el.prenom)} ${esc(el.nom)}</h2><div class="sub">${esc(c)} · ${esc(S.cfg.titre)}</div></div><div class="tools">
+ ${ys.length>1?`<select class="inp" data-chg="fsy">${ys.map(y=>`<option value="${y}" ${y===sy?'selected':''}>${syLabel(y)}</option>`).join('')}</select>`:`<span class="sub">${syLabel(sy)}</span>`}
+ <button class="btn sm sec" data-act="fiche-csv">Exporter (CSV)</button><button class="btn sm ghost" data-act="fiche-close">Fermer</button></div></div>
+ <div class="fsum">${sum}</div>
+ <div class="hint">Colonne Bilan : clique sur un niveau pour positionner directement l\u2019élève (observation en atelier, PFMP…). Note /20 indicative : ${LV().map((x,i)=>x.s+' = '+fmt1(i/(NL()-1)*20)).join(', ')}.</div>
+ <div class="scroll"><table class="fiche"><thead><tr><th></th><th style="text-align:left">Critère</th><th>T1</th><th>T2</th><th>T3</th><th>Auto</th><th>Bilan</th></tr></thead><tbody>${rows}</tbody></table></div></div></div>`;
+}
+
+function aEval(){
+ const c=S.ac,Lt=tpsOf(c);
+ if(!Lt.find(([id])=>id===S.atp))S.atp=Lt[0]?Lt[0][0]:null;
+ const tpSel=Lt.length?`<select class="inp" data-chg="atp">${Lt.map(([id,t])=>`<option value="${esc(id)}" ${id===S.atp?'selected':''}>${esc(t.titre)}</option>`).join('')}</select>`:'';
+ const head=aHead('Évaluer',classSel()+tpSel);
+ if(!Lt.length)return head+'<div class="card empty">Aucun TP pour cette classe.<br><br><button class="btn" data-act="atab" data-t="tps">Créer un TP</button></div>';
+ const els=elevesOf(c);if(!els.length)return head+'<div class="card empty">Aucun élève dans cette classe.</div>';
+ const t=S.cfg.tps[S.atp],as=tpActs(t),C=S.cfg.competences,A=S.cfg.actions,groups=groupByComp(as);
+ let pend=0;els.forEach(([e])=>{const E=evOf(c,e)[S.atp]||{};as.forEach(a=>{if(E[a]&&E[a].a&&!E[a].p)pend++})});
+ const tbl=`<div class="card scroll"><table class="ev"><thead><tr><th></th>${groups.map(([cid,g])=>`<th class="gh" colspan="${g.length}" style="border-bottom:3px solid ${compColor(cid)}" title="${esc(C[cid].lib)}">${esc(C[cid].code)}</th>`).join('')}</tr>
+ <tr><th></th>${as.map(a=>`<th title="${esc(A[a].lib)}">${esc(A[a].code)}</th>`).join('')}</tr></thead><tbody>
+ ${els.map(([e,el])=>{const E=evOf(c,e)[S.atp]||{};return `<tr><td class="nm"><button class="nmb" data-act="fiche" data-id="${esc(e)}">${esc(el.nom)} ${esc(el.prenom)}</button></td>${as.map(a=>{const x=E[a]||{},sel=S.cell&&S.cell.e===e&&S.cell.c===a;
+  return `<td><button class="cellb c${x.p||0} ${sel?'sel':''}" data-act="cell" data-e="${esc(e)}" data-c="${esc(a)}" title="${esc(A[a].code)} · auto : ${x.a?L(x.a).s:'—'} · prof : ${x.p?L(x.p).s:'—'}">${x.p?L(x.p).s:''}${x.a?`<i class="ad" style="background:var(--n${x.a})"></i>`:''}</button></td>`}).join('')}</tr>`}).join('')}</tbody></table></div>`;
+ return head+`<div class="bar">${legend()}<span class="sp"></span>${pend?askBtn('report:'+c+':'+S.atp,`Reporter les auto-évaluations (${pend})`,'sec'):''}</div>
+ <div class="hint">Clique une case puis choisis un niveau : touches 1 à ${NL()}, 0 pour effacer, flèches pour te déplacer. La pastille en coin = auto-évaluation de l\u2019élève.</div>${tbl}`;
+}
+function vPicker(){
+ const{e,c}=S.cell,el=(S.db.eleves[S.ac]||{})[e],A=S.cfg.actions[c];if(!el||!A)return '';
+ const x=(evOf(S.ac,e)[S.atp]||{})[c]||{};
+ return `<div class="picker"><div class="pinfo"><b>${esc(el.prenom)} ${esc(el.nom)}</b><span><b style="font-size:13px">${esc(A.code)}</b> ${esc(A.lib)}</span><span>${x.a?`Auto-évaluation : <span class="badge b${x.a}">${L(x.a).s}</span>`:'Pas d\u2019auto-évaluation'}</span></div>
+ ${lvls().map(n=>`<button class="pk c${n} ${x.p===n?'on':''}" data-act="setp" data-n="${n}" title="${esc(L(n).nom)} (touche ${n})">${L(n).s}</button>`).join('')}
+ <button class="btn sm ghost" data-act="setp" data-n="0">Effacer</button><button class="btn sm ghost" data-act="cell-close">Fermer</button></div>`;
+}
+
+function aEleves(){
+ const c=S.ac,els=elevesOf(c);
+ const head=aHead('Élèves',classSel()+(els.length?'<button class="btn sm sec" data-act="copy-codes">Copier la liste des codes</button>':''));
+ const add=`<div class="card sec"><h3>Ajouter des élèves en ${esc(c)}</h3><div class="sub">Un élève par ligne : NOM Prénom (copier-coller depuis Pronote ou un tableur)</div>
+ <textarea class="inp" id="addel" placeholder="DUPONT Marie&#10;MARTIN Lucas"></textarea><div style="margin-top:10px"><button class="btn" data-act="add-el">Ajouter</button></div></div>`;
+ const list=els.length?`<div class="card"><table class="lst"><thead><tr><th>Nom</th><th>Prénom</th><th>Code</th><th></th></tr></thead><tbody>
+ ${els.map(([id,e])=>`<tr><td><button class="nmb" data-act="fiche" data-id="${esc(id)}"><b>${esc(e.nom)}</b></button></td><td>${esc(e.prenom)}</td><td class="codev">${esc(e.code)}</td><td><div class="acts" style="justify-content:flex-end"><button class="btn sm ghost" data-act="new-code" data-id="${esc(id)}">Nouveau code</button>${askBtn('del-el:'+c+':'+id,'Supprimer')}</div></td></tr>`).join('')}</tbody></table></div>`:'<div class="card empty">Aucun élève dans cette classe.</div>';
+ return head+add+list;
+}
+
+function aTps(){
+ if(S.edTp)return tpEditor();
+ const Lt=Object.entries(S.cfg.tps).sort((a,b)=>(b[1].cree||0)-(a[1].cree||0)),C=S.cfg.competences;
+ const head=aHead('TP','<button class="btn" data-act="new-tp">Nouveau TP</button>');
+ if(!Lt.length)return head+'<div class="card empty">Aucun TP. Crée ton premier TP et choisis les critères évalués.</div>';
+ return head+Lt.map(([id,t])=>{const as=tpActs(t),on=t.actif!==false,gs=groupByComp(as);
+  return `<div class="card sec"><div class="trow"><div style="flex:1;min-width:240px"><b style="font-size:17px">${esc(t.titre)}</b>
+  <div class="chips">${(t.classes||[]).map(k=>`<span class="cchip">${esc(k)}</span>`).join('')}</div>
+  <div class="sub">${gs.map(([cid,g])=>`${esc(C[cid].code)} (${g.length})`).join(' · ')} · ${pl(as.length,'critère')}</div></div>
+  <div class="acts"><label class="switch"><input type="checkbox" data-chg="tp-actif" data-id="${esc(id)}" ${on?'checked':''}>${on?'Ouvert aux élèves':'Fermé'}</label>
+  <button class="btn sm ghost" data-act="edit-tp" data-id="${esc(id)}">Modifier</button><button class="btn sm ghost" data-act="dup-tp" data-id="${esc(id)}">Dupliquer</button>${askBtn('del-tp:'+id,'Supprimer')}</div></div></div>`}).join('');
+}
+function tpEditor(){
+ const T=S.edTp,C=S.cfg.competences,A=S.cfg.actions;
+ const cls=groupClasses(S.cfg.classes).map(([n,l])=>`<div class="glabel">${esc(n)} <button class="btn sm ghost" data-act="ed-cls-all" data-n="${esc(n)}">Toutes</button></div><div class="chkgrid">${l.map(k=>`<label class="chk ${T.classes.includes(k)?'on':''}"><input type="checkbox" data-chg="ed-cls" value="${esc(k)}" ${T.classes.includes(k)?'checked':''}>${esc(k)}</label>`).join('')}</div>`).join('');
+ const acts=byBloc(groupByComp(allAids())).map(([b,gs])=>`<div class="dtitle"><i style="background:${blocColor(b)}"></i>${esc(blocName(b))}</div>`+gs.map(([cid,as])=>{const nOn=as.filter(a=>T.acts.includes(a)).length;
+  return `<div class="glabel"><span class="chip" style="background:${compColor(cid)}">${esc(C[cid].code)}</span>${esc(C[cid].lib)} <button class="btn sm ghost" data-act="ed-comp-all" data-c="${esc(cid)}">${nOn===as.length?'Tout retirer':'Tout cocher'}</button></div>
+  <div class="chkgrid">${as.map(a=>`<label class="chk wide ${T.acts.includes(a)?'on':''}" title="${esc((A[a].ind||[]).join(' • '))}"><input type="checkbox" data-chg="ed-act" value="${esc(a)}" ${T.acts.includes(a)?'checked':''}><b>${esc(A[a].code)}</b>${esc(A[a].lib)}</label>`).join('')}</div>`}).join('')).join('');
+ return aHead(T.id?'Modifier le TP':'Nouveau TP')+`<div class="card sec"><div class="field"><label>Titre du TP</label><input class="inp" id="tptitre" data-inp="ed-titre" value="${esc(T.titre)}" placeholder="Ex. : Mise en service d\u2019une chambre froide"></div></div>
+ <div class="card sec"><h3>Classes concernées (${T.classes.length})</h3>${cls}</div>
+ <div class="card sec"><h3>Critères évalués (${T.acts.length})</h3><div class="sub">Conseil : 3 à 8 critères par TP</div>${acts}</div>
+ <div class="acts"><button class="btn" data-act="save-tp">Enregistrer</button><button class="btn ghost" data-act="cancel-tp">Annuler</button></div>`;
+}
+
+function actEditor(E){
+ return `<div class="card sec" style="border-color:var(--pr);margin-top:10px">
+ <div class="cols" style="grid-template-columns:140px 1fr"><div class="field"><label>Code</label><input class="inp" data-inp="ea" data-f="code" value="${esc(E.code)}"></div>
+ <div class="field"><label>Action (libellé officiel)</label><input class="inp" data-inp="ea" data-f="lib" value="${esc(E.lib)}"></div></div>
+ <div class="field"><label>Libellé élève (facultatif, plus court)</label><input class="inp" data-inp="ea" data-f="el" maxlength="80" value="${esc(E.el)}"></div>
+ <div class="field"><label>Indicateurs d\u2019évaluation (un par ligne)</label><textarea class="inp" data-inp="ea" data-f="ind">${esc(E.ind)}</textarea></div>
+ <div class="acts"><button class="btn sm" data-act="save-act">Enregistrer</button><button class="btn sm ghost" data-act="cancel-act">Annuler</button></div></div>`;
+}
+function aRef(){
+ const head=aHead('Référentiel · '+esc(S.cfg.titre),askBtn('reset-ref','Rétablir le référentiel officiel'));
+ const A=S.cfg.actions;
+ const allG=compsSorted().map(([cid])=>[cid,sortAids(Object.keys(A).filter(a=>A[a].comp===cid))]);
+ return head+byBloc(allG).map(([b,gs])=>`<div class="dtitle"><i style="background:${blocColor(b)}"></i>${esc(blocName(b))}</div>`+gs.map(([cid,as])=>{const C=S.cfg.competences[cid],ec=S.edComp&&S.edComp.id===cid;
+  return `<div class="card sec"><div class="trow">${ec?`<div style="flex:1" class="acts"><input class="inp" style="width:90px" data-inp="ec" data-f="code" value="${esc(S.edComp.code)}"><input class="inp" style="flex:1;min-width:200px;width:auto" data-inp="ec" data-f="lib" value="${esc(S.edComp.lib)}"><button class="btn sm" data-act="save-comp">Enregistrer</button><button class="btn sm ghost" data-act="cancel-comp">Annuler</button></div>`:
+  `<div class="cghead"><span class="chip" style="background:${compColor(cid)}">${esc(C.code)}</span><b>${esc(C.lib)}</b></div><div class="acts"><button class="btn sm ghost" data-act="edit-comp" data-id="${esc(cid)}">Renommer</button><button class="btn sm sec" data-act="new-act" data-c="${esc(cid)}">Ajouter un critère</button></div>`}</div>
+  ${as.map(a=>S.edAct&&S.edAct.id===a?actEditor(S.edAct):`<div class="arow2"><span class="code">${esc(A[a].code)}</span><div><div class="cl">${esc(A[a].lib)}</div>${A[a].el?`<div class="ix">Élève : ${esc(A[a].el)}</div>`:''}${(A[a].ind||[]).length?`<div class="ix">${A[a].ind.map(esc).join(' • ')}</div>`:''}</div>
+  <div class="acts"><button class="btn sm ghost" data-act="edit-act" data-id="${esc(a)}">Modifier</button>${askBtn('del-act:'+a,'Supprimer')}</div></div>`).join('')}
+  ${S.edAct&&!S.edAct.id&&S.edAct.comp===cid?actEditor(S.edAct):''}</div>`}).join('')).join('');
+}
+
+function aParams(){
+ const m=S.cfg.mode,T=S.cfg.trims,toDate=md=>{const d=new Date(mdDate(CUR_SY,md));return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+ return aHead('Paramètres')+`<div class="card sec"><h3>Classes</h3><div class="sub">Séparées par des virgules</div><input class="inp" id="cls" value="${esc(S.cfg.classes.join(', '))}"><div style="margin-top:10px"><button class="btn sm" data-act="save-cls">Enregistrer</button></div></div>
+ <div class="card sec"><h3>Trimestres</h3><div class="sub">Le 1er trimestre commence à la rentrée. Les dates sont reprises chaque année.</div><div class="cols">
+ <div class="field"><label>Début du 2e trimestre</label><input class="inp" type="date" id="t2" value="${toDate(T.t2)}"></div><div class="field"><label>Début du 3e trimestre</label><input class="inp" type="date" id="t3" value="${toDate(T.t3)}"></div></div><button class="btn sm" data-act="save-trims">Enregistrer</button></div>
+ <div class="card sec"><h3>Niveau retenu pour le bilan</h3><div class="sub">Quand un critère est évalué plusieurs fois</div><div class="mode">
+ <button class="mopt ${m==='derniere'?'on':''}" data-act="set-mode" data-m="derniere"><b>Dernière évaluation</b><span class="sub">Reflète le niveau actuel de l\u2019élève</span></button>
+ <button class="mopt ${m==='meilleure'?'on':''}" data-act="set-mode" data-m="meilleure"><b>Meilleure évaluation</b><span class="sub">Valorise la compétence déjà démontrée</span></button></div></div>
+ <div class="card sec"><h3>Référentiel</h3><div class="sub">Actuel : ${esc(S.cfg.titre)}. Changer de référentiel remplace la liste des critères (les TP et évaluations existants ne correspondront plus).</div><div class="acts">
+ ${Object.entries(PRESETS).filter(([k])=>k!==S.cfg.ref).map(([k,p])=>askBtn('preset:'+k,'Passer à : '+esc(p.nom),'ghost')).join('')}</div></div>
+ <div class="card sec"><h3>Exports et sauvegarde</h3><div class="acts" style="margin-top:8px"><button class="btn sm sec" data-act="csv">Bilan de la ${esc(S.ac||'')} · ${perLabel()} (CSV)</button><button class="btn sm sec" data-act="json">Sauvegarde complète (JSON)</button>
+ <label class="btn sm ghost">Restaurer une sauvegarde<input type="file" accept=".json,application/json" data-chg="import" hidden></label>
+ ${S.pendingImport?askBtn('import','Remplacer toutes les données'):''}</div></div>
+ <div class="card sec"><h3>Mot de passe professeur</h3><div class="cols"><div class="field"><label>Nouveau mot de passe</label><input class="inp" type="password" id="np1"></div><div class="field"><label>Confirmer</label><input class="inp" type="password" id="np2" data-enter="chg-pw"></div></div><button class="btn sm" data-act="chg-pw">Changer</button></div>
+ <div class="card sec"><h3>Base de données</h3><div class="mono">${DEMO?'Mode démonstration : données en mémoire, rien n\u2019est enregistré':esc(FB_URL+'/'+ROOT)}</div></div>`;
+}
+
+/* ===== Actions ===== */
+function pressKey(k){
+ if(Date.now()<S.lock)return;
+ if(k==='del'){S.code=S.code.slice(0,-1);S.msg='';render();return}
+ if(S.code.length>=4)return;S.code+=k;S.msg='';render();
+ if(S.code.length===4)setTimeout(checkCode,160);
+}
+async function checkCode(){
+ const e=S.eleves&&S.eleves[S.eid];if(!e||S.v!=='code')return;
+ if(String(e.code)===S.code){S.fails=0;S.code='';S.v='eleve';S.stab='tp';S.tp=null;S.mine=null;S.openInd={};S.openSC={};render();await reloadMine()}
+ else{S.fails++;S.code='';S.msg='Code incorrect';if(S.fails>=5){S.fails=0;S.lock=Date.now()+30000;tickLock()}render()}
+}
+function tickLock(){if(S.v!=='code')return;if(Date.now()<S.lock){render();setTimeout(tickLock,1000)}else{S.msg='';render()}}
+async function reloadMine(){
+ try{const[m,c]=await Promise.all([Store.get(`evals/${S.classe}/${S.eid}`),Store.get('config')]);S.mine=m||{};if(c){S.cfg=c;normCfg()}}
+ catch(e){S.mine=S.mine||{};toast('Connexion impossible',true)}
+ if(S.v==='eleve')render();
+}
+async function setAuto(aid,n){
+ const tid=S.tp;if(!tid)return;S.mine[tid]=S.mine[tid]||{};const x=S.mine[tid][aid]=S.mine[tid][aid]||{};
+ if(x.a===n)return;x.a=n;x.ta=Date.now();render();
+ if(await safe(Store.patch(`evals/${S.classe}/${S.eid}/${tid}/${aid}`,{a:n,ta:x.ta})))toast('Enregistré');
+}
+async function loadDb(){
+ try{const d=await Store.get('')||{};S.db={config:d.config||S.cfg,eleves:d.eleves||{},evals:d.evals||{}};S.cfg=S.db.config;
+  if(normCfg())await safe(Store.put('config',S.cfg))}
+ catch(e){toast('Connexion impossible',true);if(!S.db)S.db={config:S.cfg,eleves:{},evals:{}}}
+}
+async function adminLogin(){
+ const pwEl=$('#pw');if(!pwEl)return;const pw=pwEl.value;
+ if(!S.cfg){
+  const p2=($('#pw2')||{}).value;
+  if(pw.length<4){S.msg='4 caractères minimum';render();return}
+  if(pw!==p2){S.msg='Les deux mots de passe sont différents';render();return}
+  const c=defaultConfig(S.setupRef);c.adminHash=await hash(pw);if(!await safe(Store.put('config',c)))return;S.cfg=c;normCfg();
+ }else if(await hash(pw)!==S.cfg.adminHash){S.msg='Mot de passe incorrect';render();return}
+ S.msg='';S.admin=true;await loadDb();S.v='admin';S.a='dash';S.per=0;
+ if(!S.ac||!S.cfg.classes.includes(S.ac))S.ac=S.cfg.classes.find(c=>elevesOf(c).length)||S.cfg.classes[0];
+ render();
+}
+function moveCell(dy,dx){
+ const els=elevesOf(S.ac).map(x=>x[0]),as=tpActs(S.cfg.tps[S.atp]);if(!els.length||!as.length)return;
+ let i=els.indexOf(S.cell.e),j=as.indexOf(S.cell.c);i=Math.max(0,Math.min(els.length-1,i+dy));j=Math.max(0,Math.min(as.length-1,j+dx));S.cell={e:els[i],c:as[j]};
+}
+function evSlot(cl,e,tid,a){const ev=S.db.evals;ev[cl]=ev[cl]||{};ev[cl][e]=ev[cl][e]||{};ev[cl][e][tid]=ev[cl][e][tid]||{};return ev[cl][e][tid][a]=ev[cl][e][tid][a]||{}}
+async function setProf(n){
+ if(!S.cell||n>NL())return;const{e,c}=S.cell,cl=S.ac,tid=S.atp,x=evSlot(cl,e,tid,c),now=Date.now();
+ if(n){x.p=n;x.tq=now}else{delete x.p;delete x.tq}
+ moveCell(1,0);render();
+ await safe(Store.patch(`evals/${cl}/${e}/${tid}/${c}`,n?{p:n,tq:now}:{p:null,tq:null}));
+}
+async function setDirect(a,n){
+ const cl=S.ac,e=S.ficheEid,x=evSlot(cl,e,'_dir',a),now=Date.now();x.p=n;x.tq=now;render();
+ if(await safe(Store.patch(`evals/${cl}/${e}/_dir/${a}`,{p:n,tq:now})))toast(S.cfg.actions[a].code+' : '+L(n).nom);
+}
+async function reportAuto(c,tid){
+ const as=tpActs(S.cfg.tps[tid]),now=Date.now(),up={};let n=0;
+ elevesOf(c).forEach(([e])=>{const E=evOf(c,e)[tid]||{};as.forEach(a=>{const x=E[a];if(x&&x.a&&!x.p){x.p=x.a;x.tq=now;up[`${e}/${tid}/${a}/p`]=x.a;up[`${e}/${tid}/${a}/tq`]=now;n++}})});
+ render();
+ if(n&&await safe(Store.patch(`evals/${c}`,up)))toast(`${n} évaluation${n>1?'s':''} reportée${n>1?'s':''}`);
+}
+function parseNames(t){
+ return t.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{let nom,prenom;
+  if(/[;\t]/.test(l)){[nom,prenom]=l.split(/[;\t]/).map(s=>s.trim())}
+  else{const w=l.split(/\s+/);let k=0;while(k<w.length-1&&w[k]===w[k].toUpperCase()&&/\p{L}/u.test(w[k]))k++;if(k===0)k=1;nom=w.slice(0,k).join(' ');prenom=w.slice(k).join(' ')}
+  return{nom:(nom||'').toUpperCase(),prenom:prenom||''}}).filter(x=>x.nom);
+}
+async function addEleves(){
+ const ta=$('#addel'),Ls=parseNames(ta?ta.value:''),c=S.ac;if(!Ls.length){toast('Aucun nom à ajouter',true);return}
+ const up={};S.db.eleves[c]=S.db.eleves[c]||{};
+ Ls.forEach(x=>{const id=uid()+Math.random().toString(36).slice(2,4);const o={nom:x.nom,prenom:x.prenom,code:newCodeVal()};up[id]=o;S.db.eleves[c][id]=o});
+ render();if(await safe(Store.patch(`eleves/${c}`,up)))toast(`${Ls.length} élève${Ls.length>1?'s':''} ajouté${Ls.length>1?'s':''}`);
+}
+async function newCode(id){const c=S.ac,e=S.db.eleves[c][id];e.code=newCodeVal();render();await safe(Store.put(`eleves/${c}/${id}/code`,e.code))}
+async function copyCodes(){
+ const t=elevesOf(S.ac).map(([,e])=>`${e.nom} ${e.prenom} : ${e.code}`).join('\n');
+ try{await navigator.clipboard.writeText(t);toast('Liste copiée')}catch(e){toast('Copie impossible',true)}
+}
+async function saveTp(){
+ const T=S.edTp;T.titre=(T.titre||'').trim();
+ if(!T.titre)return toast('Donne un titre au TP',true);
+ if(!T.classes.length)return toast('Choisis au moins une classe',true);
+ if(!T.acts.length)return toast('Choisis au moins un critère',true);
+ const id=T.id||uid(),o={titre:T.titre,classes:T.classes,acts:sortAids(T.acts),actif:T.actif,cree:T.cree||Date.now()};
+ S.cfg.tps[id]=o;S.edTp=null;render();if(await safe(Store.put(`config/tps/${id}`,o)))toast('TP enregistré');
+}
+async function saveAct(){
+ const E=S.edAct;E.code=(E.code||'').trim();E.lib=(E.lib||'').trim();
+ if(!E.code||!E.lib)return toast('Code et libellé obligatoires',true);
+ const A=S.cfg.actions,id=E.id||('u'+uid()),old=A[id];
+ const o={code:E.code,comp:E.comp,lib:E.lib,el:(E.el||'').trim(),ind:String(E.ind||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean),
+  o:old?old.o:Math.max(0,...Object.values(A).filter(a=>a.comp===E.comp).map(a=>a.o||0))+1};
+ A[id]=o;S.edAct=null;render();if(await safe(Store.put(`config/actions/${id}`,o)))toast('Critère enregistré');
+}
+async function saveComp(){
+ const E=S.edComp,C=S.cfg.competences[E.id];if(!E.code.trim()||!E.lib.trim())return toast('Code et libellé obligatoires',true);
+ C.code=E.code.trim();C.lib=E.lib.trim();S.edComp=null;render();if(await safe(Store.put(`config/competences/${E.id}`,C)))toast('Compétence renommée');
+}
+async function saveClasses(){
+ const v=$('#cls').value.split(/[,;\s]+/).map(s=>s.trim().toUpperCase()).filter(Boolean),u=[...new Set(v)];
+ if(!u.length)return toast('Indique au moins une classe',true);
+ S.cfg.classes=u;if(!u.includes(S.ac))S.ac=u[0];render();if(await safe(Store.put('config/classes',u)))toast('Classes enregistrées');
+}
+async function saveTrims(){
+ const md=id=>{const v=$(id).value;return v?v.slice(5):null},t2=md('#t2'),t3=md('#t3');
+ if(!t2||!t3)return toast('Indique les deux dates',true);
+ const o=s=>{const[m,d]=s.split('-').map(Number);return((m+4)%12)*40+d};
+ if(o(t2)>=o(t3))return toast('Le 3e trimestre doit commencer après le 2e',true);
+ S.cfg.trims={t2,t3};render();if(await safe(Store.put('config/trims',S.cfg.trims)))toast('Trimestres enregistrés');
+}
+function csvLine(a){return a.map(v=>{v=String(v??'');return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(';')}
+function exportCsv(){
+ const st=stats(S.ac,perRange()),A=S.cfg.actions;
+ const rows=[csvLine(['Nom','Prénom',...st.aids.map(a=>A[a].code),'Critères acquis (%)','Note indicative /20'])].concat(st.els.map(([e,el])=>{const v=st.aids.map(a=>st.M[e][a]),ev=v.filter(Boolean),nt=note20(v);
+  return csvLine([el.nom,el.prenom,...v.map(x=>x?L(x).s:''),ev.length?pct(ev.filter(x=>x>=OK).length,ev.length):'',nt===null?'':fmt1(nt)])}));
+ download(`competences-${S.ac}-${S.per?'T'+S.per:'bilan'}-${today()}.csv`,'﻿'+rows.join('\r\n'),'text/csv;charset=utf-8');
+}
+function exportFiche(){
+ const c=S.ac,eid=S.ficheEid,el=S.db.eleves[c][eid],E=evOf(c,eid),sy=S.fsy||CUR_SY,A=S.cfg.actions,C=S.cfg.competences,s=x=>x?L(x).s:'';
+ const rows=[csvLine([el.nom+' '+el.prenom,c,syLabel(sy)]),csvLine(['Compétence','Critère','Action','T1','T2','T3','Auto-évaluation','Bilan'])].concat(allAids().map(a=>csvLine([C[A[a].comp].code,A[a].code,A[a].lib,...[1,2,3].map(k=>s(consol(E,a,range(sy,k)))),s(lastAuto(E,a)),s(consol(E,a,null))])));
+ download(`fiche-${el.nom}-${el.prenom}-${today()}.csv`,'﻿'+rows.join('\r\n'),'text/csv;charset=utf-8');
+}
+function exportJson(){download(`suivi-competences-${today()}.json`,JSON.stringify(S.db,null,1),'application/json')}
+async function changePw(){
+ const a=$('#np1').value,b=$('#np2').value;
+ if(a.length<4)return toast('4 caractères minimum',true);if(a!==b)return toast('Les deux mots de passe sont différents',true);
+ S.cfg.adminHash=await hash(a);if(await safe(Store.put('config/adminHash',S.cfg.adminHash))){toast('Mot de passe changé');render()}
+}
+async function applyPreset(ref){
+ const p=defaultConfig(ref),c=S.cfg;Object.assign(c,{ref:p.ref,titre:p.titre,echelle:p.echelle,blocs:p.blocs,competences:p.competences,actions:p.actions});render();
+ if(await safe(Store.patch('config',{ref:c.ref,titre:c.titre,echelle:c.echelle,blocs:c.blocs,competences:c.competences,actions:c.actions})))toast('Référentiel : '+c.titre);
+}
+async function doConfirm(k){
+ const[t,a,b]=k.split(':');S.confirm=null;
+ if(t==='del-el'){delete S.db.eleves[a][b];if(S.db.evals[a])delete S.db.evals[a][b];render();if(await safe(Store.del(`eleves/${a}/${b}`))){await safe(Store.del(`evals/${a}/${b}`));toast('Élève supprimé')}}
+ else if(t==='del-tp'){delete S.cfg.tps[a];render();if(await safe(Store.del(`config/tps/${a}`)))toast('TP supprimé')}
+ else if(t==='del-act'){delete S.cfg.actions[a];render();if(await safe(Store.del(`config/actions/${a}`)))toast('Critère supprimé')}
+ else if(t==='reset-ref'){await applyPreset(S.cfg.ref)}
+ else if(t==='preset'){await applyPreset(a)}
+ else if(t==='report'){await reportAuto(a,b)}
+ else if(t==='import'){const o=S.pendingImport;S.pendingImport=null;if(!o)return;if(!o.config.adminHash)o.config.adminHash=S.cfg.adminHash;if(await safe(Store.put('',o))){await loadDb();toast('Sauvegarde restaurée')}render()}
+ else render();
+}
+const toggleArr=(arr,v,on)=>{const i=arr.indexOf(v);if(on&&i<0)arr.push(v);if(!on&&i>=0)arr.splice(i,1)};
+
+const ACT={
+ 'pick-classe':async d=>{S.classe=d.c;S.eleves=null;S.v='noms';render();try{S.eleves=await Store.get(`eleves/${d.c}`)||{}}catch(e){S.eleves={};toast('Connexion impossible',true)}if(S.v==='noms')render()},
+ 'pick-eleve':d=>{S.eid=d.id;S.code='';S.msg='';S.v='code';render();if(Date.now()<S.lock)tickLock()},
+ back:d=>{S.v=d.to;S.msg='';S.code='';render()},
+ key:d=>pressKey(d.k),
+ logout:()=>{Object.assign(S,{v:'home',classe:null,eid:null,mine:null,tp:null,eleves:null,code:''});render();window.scrollTo(0,0)},
+ stab:d=>{S.stab=d.t;S.tp=null;render();reloadMine()},
+ 'open-tp':d=>{S.tp=d.id;render();window.scrollTo(0,0)},
+ 'close-tp':()=>{S.tp=null;render();reloadMine()},
+ auto:d=>setAuto(d.c,+d.n),
+ ind:d=>{S.openInd[d.a]=!S.openInd[d.a];render()},
+ scomp:d=>{S.openSC[d.c]=!S.openSC[d.c];render()},
+ 'sc-all':()=>{const g=groupByComp(allAids()),o=!g.every(([c])=>S.openSC[c]);g.forEach(([c])=>{S.openSC[c]=o});render()},
+ self:d=>setSelf(d.a,+d.n),
+ 'go-admin':()=>{S.v='login';S.msg='';render()},
+ 'setup-ref':d=>{const a=$('#pw'),b=$('#pw2'),va=a?a.value:'',vb=b?b.value:'';S.setupRef=d.r;render();if($('#pw'))$('#pw').value=va;if($('#pw2'))$('#pw2').value=vb},
+ 'admin-login':()=>adminLogin(),
+ atab:d=>{Object.assign(S,{a:d.t,cell:null,confirm:null,edTp:null,edAct:null,edComp:null});render();window.scrollTo(0,0)},
+ 'pick-ac':d=>{S.ac=d.c;render()},
+ per:d=>{S.per=+d.t;render()},
+ opencomp:d=>{S.openC[d.c]=!S.openC[d.c];render()},
+ refresh:async()=>{await loadDb();render();toast('Données actualisées')},
+ 'logout-admin':()=>{Object.assign(S,{admin:false,db:null,v:'home',cell:null,ficheEid:null,confirm:null});render()},
+ fiche:d=>{S.ficheEid=d.id;S.fsy=CUR_SY;S.cell=null;render()},
+ 'fiche-close':()=>{S.ficheEid=null;render()},
+ 'fiche-csv':()=>exportFiche(),
+ dir:d=>setDirect(d.a,+d.n),
+ noop:()=>{},
+ cell:d=>{S.cell={e:d.e,c:d.c};render()},
+ 'cell-close':()=>{S.cell=null;render()},
+ setp:d=>setProf(+d.n),
+ ask:d=>{S.confirm=d.k;render()},
+ cancel:()=>{S.confirm=null;S.pendingImport=null;render()},
+ ok:d=>doConfirm(d.k),
+ 'add-el':()=>addEleves(),
+ 'new-code':d=>newCode(d.id),
+ 'copy-codes':()=>copyCodes(),
+ 'new-tp':()=>{S.edTp={id:null,titre:'',classes:S.ac?[S.ac]:[],acts:[],actif:true};render()},
+ 'edit-tp':d=>{const t=S.cfg.tps[d.id];S.edTp={id:d.id,titre:t.titre,classes:[...(t.classes||[])],acts:[...(t.acts||[])],actif:t.actif!==false,cree:t.cree};render()},
+ 'dup-tp':d=>{const t=S.cfg.tps[d.id];S.edTp={id:null,titre:t.titre+' (copie)',classes:[...(t.classes||[])],acts:[...(t.acts||[])],actif:false};render();window.scrollTo(0,0)},
+ 'cancel-tp':()=>{S.edTp=null;render()},
+ 'save-tp':()=>saveTp(),
+ 'ed-cls-all':d=>{const g=(groupClasses(S.cfg.classes).find(x=>x[0]===d.n)||[0,[]])[1],all=g.every(k=>S.edTp.classes.includes(k));g.forEach(k=>toggleArr(S.edTp.classes,k,!all));render()},
+ 'ed-comp-all':d=>{const g=allAids().filter(a=>S.cfg.actions[a].comp===d.c),all=g.every(a=>S.edTp.acts.includes(a));g.forEach(a=>toggleArr(S.edTp.acts,a,!all));render()},
+ 'new-act':d=>{S.edAct={id:null,comp:d.c,code:'',lib:'',el:'',ind:''};S.edComp=null;render()},
+ 'edit-act':d=>{const a=S.cfg.actions[d.id];S.edAct={id:d.id,comp:a.comp,code:a.code,lib:a.lib,el:a.el||'',ind:(a.ind||[]).join('\n')};S.edComp=null;render()},
+ 'cancel-act':()=>{S.edAct=null;render()},
+ 'save-act':()=>saveAct(),
+ 'edit-comp':d=>{const c=S.cfg.competences[d.id];S.edComp={id:d.id,code:c.code,lib:c.lib};S.edAct=null;render()},
+ 'cancel-comp':()=>{S.edComp=null;render()},
+ 'save-comp':()=>saveComp(),
+ 'save-cls':()=>saveClasses(),
+ 'save-trims':()=>saveTrims(),
+ 'set-mode':async d=>{S.cfg.mode=d.m;render();await safe(Store.put('config/mode',d.m))},
+ csv:()=>exportCsv(),json:()=>exportJson(),'chg-pw':()=>changePw()
+};
+const CHG={
+ ac:b=>{S.ac=b.value;S.cell=null;S.confirm=null;render()},
+ atp:b=>{S.atp=b.value;S.cell=null;S.confirm=null;render()},
+ fsy:b=>{S.fsy=+b.value;render()},
+ 'tp-actif':async b=>{const id=b.dataset.id;S.cfg.tps[id].actif=b.checked;render();await safe(Store.put(`config/tps/${id}/actif`,b.checked))},
+ 'ed-cls':b=>{toggleArr(S.edTp.classes,b.value,b.checked);render()},
+ 'ed-act':b=>{toggleArr(S.edTp.acts,b.value,b.checked);render()},
+ import:b=>{const f=b.files&&b.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(!o||!o.config)throw new Error();S.pendingImport=o;S.confirm='import';render()}catch(e){toast('Fichier de sauvegarde invalide',true)}})}
+};
+const INP={'ed-titre':b=>{S.edTp.titre=b.value},ea:b=>{S.edAct[b.dataset.f]=b.value},ec:b=>{S.edComp[b.dataset.f]=b.value}};
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const f=ACT[b.dataset.act];if(f)f(b.dataset)});
+document.addEventListener('change',e=>{const b=e.target.closest('[data-chg]');if(b&&CHG[b.dataset.chg])CHG[b.dataset.chg](b)});
+document.addEventListener('input',e=>{const b=e.target.closest('[data-inp]');if(b&&INP[b.dataset.inp])INP[b.dataset.inp](b)});
+document.addEventListener('keydown',e=>{
+ const t=e.target;
+ if(t.matches&&t.matches('input,textarea,select')){if(e.key==='Enter'&&t.dataset.enter&&ACT[t.dataset.enter]){e.preventDefault();ACT[t.dataset.enter]({})}return}
+ if(S.v==='code'){if(/^[0-9]$/.test(e.key))pressKey(e.key);else if(e.key==='Backspace')pressKey('del');return}
+ if(e.key==='Escape'&&S.ficheEid){S.ficheEid=null;render();return}
+ if(S.v==='admin'&&S.a==='eval'&&S.cell){
+  const mv={ArrowDown:[1,0],ArrowUp:[-1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]}[e.key];
+  if(/^[1-9]$/.test(e.key)&&+e.key<=NL()){e.preventDefault();setProf(+e.key)}
+  else if(e.key==='0'||e.key==='Delete'||e.key==='Backspace'){e.preventDefault();setProf(0)}
+  else if(mv){e.preventDefault();moveCell(mv[0],mv[1]);render()}
+  else if(e.key==='Escape'){S.cell=null;render()}
+ }
+});
+setInterval(async()=>{
+ const idle=()=>S.v==='admin'&&(S.a==='dash'||S.a==='eval')&&!S.cell&&!S.ficheEid&&!S.confirm&&document.visibilityState==='visible';
+ if(idle()){await loadDb();if(idle())render()}
+},25000);
+
+/* ===== Démo ===== */
+async function seedDemo(){
+ const c=defaultConfig('mfer');c.adminHash=await hash('demo');const D=864e5,now=Date.now();
+ c.tps={
+  tA:{titre:'Préparer une intervention de dépannage',classes:['2MFER','1MFER'],acts:['a1_1','a1_3','a1_6','a2_1','a2_5','a3_2'],actif:true,cree:now-D*40},
+  tB:{titre:'Réaliser le réseau fluidique d\u2019une chambre froide',classes:['2MFER'],acts:['a4_1','a4_2','a6_1','a6_2','a6_4'],actif:true,cree:now-D*18},
+  tC:{titre:'Mise en service d\u2019une PAC air/eau',classes:['1MFER'],acts:['a7_1','a7_3','a7_4','a7_6','a8_4','a12_2'],actif:true,cree:now-D*12},
+  tD:{titre:'Maintenance préventive d\u2019un groupe froid',classes:['1MFER'],acts:['a9_1','a9_4','a9_6','a9_7','a11_1'],actif:true,cree:now-D*4}
+ };
+ const names={'2MFER':['MARTIN Léa','BERNARD Hugo','PETIT Yanis','DUBOIS Nathan','MOREAU Inès','LAURENT Lucas','SIMON Enzo','MICHEL Louis','GARCIA Adam','ROUX Théo'],
+  '1MFER':['BONNET Kylian','LAMBERT Noah','FONTAINE Zoé','ROUSSEAU Gabriel','VINCENT Mathis','MULLER Arthur','LEROY Ethan','FAURE Raphaël']};
+ let sd=11;const rnd=()=>(sd=(sd*9301+49297)%233280)/233280,cl=v=>Math.max(1,Math.min(3,v));
+ const el={},ev={};
+ for(const k in names){el[k]={};ev[k]={};names[k].forEach((n,i)=>{const id='e'+k+i,[nom,prenom]=n.split(' ');el[k][id]={nom,prenom,code:'1234'};ev[k][id]={};
+  const skill=rnd(),bias=i%4===1?1:i%5===3?-1:0;
+  Object.entries(c.tps).forEach(([tid,t])=>{if(!t.classes.includes(k))return;ev[k][id][tid]={};
+   t.acts.forEach(a=>{if(rnd()<.1)return;const p=cl(Math.round(1+skill*2+(rnd()-.5)*1.3)),x={a:cl(p+bias+(rnd()<.15?1:0)),ta:t.cree+36e5};
+    if(tid!=='tD'||rnd()<.4){x.p=p;x.tq=t.cree+72e5}ev[k][id][tid][a]=x})});
+  if(k==='1MFER'){const d={};
+   ['a1_1','a1_3','a2_1','a4_1','a6_2','a6_4'].forEach((a,j)=>{if(rnd()<.25)return;d[a]={p:cl(Math.round(.6+skill*2)),tq:new Date(CUR_SY,0,20+j).getTime()}});
+   ['a4_2','a6_1','a6_3'].forEach((a,j)=>{if(rnd()<.3)return;d[a]={p:cl(Math.round(1+skill*2)),tq:new Date(CUR_SY,3,10+j).getTime()}});
+   ev[k][id]._dir=d}
+ })}
+ MEM={config:c,eleves:el,evals:ev};
+}
+
+async function init(){
+ if(DEMO)$('#demo').textContent='Mode démonstration : données fictives, rien n\u2019est enregistré. Code élève : 1234 · Mot de passe professeur : demo';
+ render();
+ if(DEMO)await seedDemo();
+ try{S.cfg=await Store.get('config');normCfg()}catch(e){S.err=true}
+ render();
+}
+init();
+</script>
+</body>
+</html>
