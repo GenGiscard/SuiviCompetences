@@ -35,8 +35,12 @@ h2{font-size:22px;margin:0;font-weight:900}
 .card{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:18px}
 .empty{text-align:center;color:var(--mu);font-weight:700;padding:34px 18px}
 .foot{margin-top:40px;text-align:center}
-.back{color:var(--mu);font-weight:800;font-size:15px;padding:6px 0;margin-bottom:6px}
-.back:hover{color:var(--pr)}
+.back{display:inline-flex;align-items:center;gap:10px;background:var(--pr);color:#fff;font-weight:900;font-size:18px;padding:12px 22px 12px 16px;border-radius:13px;margin:0 0 16px;box-shadow:0 5px 14px rgba(48,86,211,.28);transition:transform .15s,box-shadow .15s}
+.back:hover{transform:translateX(-3px);box-shadow:0 8px 18px rgba(48,86,211,.36)}
+.back .arr{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.22)}
+.back .arr svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.toprow .back{margin-bottom:0}
+.wrap.narrow .toprow{margin-bottom:18px}
 .niv-title{font-weight:900;color:var(--mu);font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:20px 0 9px}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
 .cbtn{background:var(--sf);border:2px solid var(--ln);border-radius:16px;padding:22px 8px;font-size:24px;font-weight:900;transition:.15s}
@@ -726,7 +730,7 @@ function logosHtml(cls='lg'){const l=(S.cfg&&S.cfg.logos)||{},e=l.ecole||LOGO_ES
  return `<span class="${cls}">${e?`<img src="${e}" alt="Logo de l\u2019établissement">`:''}${p?`<img src="${p}" alt="Logo du professeur">`:''}</span>`}
 const brand=(t,s)=>`<div class="brand">${logosHtml()}<div><h1>${esc(t)}</h1>${s?`<div class="sub">${esc(s)}</div>`:''}</div></div>`;
 const TUTO_BTN='<button class="tuto-btn" type="button" data-act="tuto"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 6.5v7l5.5-3.5z" fill="currentColor"/></svg>Tuto</button>';
-const backBtn=(to,l='Retour')=>`<button class="back" data-act="back" data-to="${to}">&larr; ${l}</button>`;
+const backBtn=(to,l='Retour')=>`<button class="back" data-act="back" data-to="${to}"><span class="arr"><svg viewBox="0 0 20 20"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg></span>${l}</button>`;
 function ring(p,lab){const r=46,C=2*Math.PI*r,v=p===null?0:p;return `<svg width="118" height="118" viewBox="0 0 110 110"><circle cx="55" cy="55" r="${r}" fill="none" style="stroke:#e6e9f0" stroke-width="12"/><circle cx="55" cy="55" r="${r}" fill="none" style="stroke:var(--n3)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(C*v).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 55 55)"/><text x="55" y="58" text-anchor="middle" font-size="22" font-weight="900" style="fill:var(--ink)" font-family="Nunito,sans-serif">${p===null?'—':Math.round(v*100)+'%'}</text><text x="55" y="75" text-anchor="middle" font-size="10" font-weight="800" style="fill:var(--mu)" font-family="Nunito,sans-serif">${esc(lab||'réussite')}</text></svg>`}
 const legend=()=>`<div class="legend">${lvls().map(n=>`<span><i class="sw s${n}"></i>${L(n).s} : ${L(n).nom}</span>`).join('')}</div>`;
 const lvTag=(n,cls='mini')=>`<span class="${cls} c${n||0}" title="${n?esc(L(n).nom):'Non évalué'}">${n?L(n).s:'–'}</span>`;
@@ -825,7 +829,7 @@ function vTpsEleve(){
 }
 function vTpEleve(){
  const id=S.tp,t=S.cfg.tps[id],R=S.mine[id]||{},can=stuOn()&&t.actif!==false;
- return `<button class="back" data-act="close-tp">&larr; Tous mes TP</button><h2 class="tph">${esc(t.titre)}</h2>
+ return `<button class="back" data-act="close-tp"><span class="arr"><svg viewBox="0 0 20 20"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg></span>Retour à mes TP</button><h2 class="tph">${esc(t.titre)}</h2>
  <div class="sub">${can?'Pour chaque compétence, clique sur le résultat noté par ton professeur sur ta fiche de TP.':'Résultats de ce TP.'}</div>
  ${groupByComp(tpActs(t)).map(([cid,as])=>{const C=S.cfg.competences[cid];return `<div class="cgroup"><div class="cghead"><span class="chip" style="background:${compColor(cid)}">${esc(C.code)}</span><b>${esc(C.lib)}</b></div>${as.map(a=>{const A=S.cfg.actions[a],x=R[a]||{},prof=x.p&&!isStu(x),lock=prof||!can;
   return `<div class="ccard"><div class="chead"><span class="code">${esc(A.code)}</span>${prof?'<span class="badge b0">Saisi par le professeur</span>':x.p?'<span class="badge b3">Enregistré</span>':''}</div>
@@ -934,7 +938,7 @@ function aEval(){
  const c=S.ac,Lt=tpsOf(c);
  if(!Lt.find(([id])=>id===S.atp))S.atp=Lt[0]?Lt[0][0]:null;
  const tpSel=Lt.length?`<select class="inp" data-chg="atp">${Lt.map(([id,t])=>`<option value="${esc(id)}" ${id===S.atp?'selected':''}>${esc(t.titre)}</option>`).join('')}</select>`:'';
- const head=`<button class="back" data-act="atab" data-t="tps">&larr; Retour aux TP</button>`+aHead('Saisir les résultats d\u2019un TP',classSel()+tpSel);
+ const head=`<button class="back" data-act="atab" data-t="tps"><span class="arr"><svg viewBox="0 0 20 20"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg></span>Retour aux TP</button>`+aHead('Saisir les résultats d\u2019un TP',classSel()+tpSel);
  if(!Lt.length)return head+'<div class="card empty">Aucun TP pour cette classe.<br><br><button class="btn" data-act="atab" data-t="tps">Créer un TP</button></div>';
  const els=elevesOf(c);if(!els.length)return head+'<div class="card empty">Aucun élève dans cette classe.</div>';
  const t=S.cfg.tps[S.atp],as=tpActs(t),C=S.cfg.competences,A=S.cfg.actions,groups=groupByComp(as);
