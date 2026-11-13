@@ -322,6 +322,9 @@ button.hd:hover{border-color:#9aa3b5}
 .lvl:disabled:hover{border-color:var(--ln)}.lvl.on:disabled:hover{border-color:var(--lc)}
 .cellb .stm{position:absolute;right:2px;top:1px;font-style:normal;font-size:9px;font-weight:900;color:var(--pr)}
 .hd.stu{border-style:dashed;border-color:var(--pr)}
+.picker.top{z-index:60}
+.sg.rm{color:var(--n1);font-size:14px;padding:4px 10px}
+.sg.rm:hover{background:var(--n1l)}
 .toprow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .tuto-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:11px 20px;border-radius:13px;background:linear-gradient(135deg,#ff8a3d,#e8457c);color:#fff;font-weight:900;font-size:17px;box-shadow:0 6px 16px rgba(232,69,124,.32);transition:transform .15s,box-shadow .15s;flex:none}
 .tuto-btn:hover{transform:translateY(-2px);box-shadow:0 9px 20px rgba(232,69,124,.4)}
@@ -459,6 +462,7 @@ return{stop(){scenes.forEach(s=>{s.active=false;s.stop=true;s.gen++});io.disconn
 /* ===== Configuration ===== */
 const FB_URL='https://evaluation-bloc-default-rtdb.europe-west1.firebasedatabase.app';
 const ROOT='suivi_competences';
+const DEFAULT_REF='mfer';
 const DEMO=/demo/i.test(location.hash);
 
 const ECH={
@@ -593,6 +597,34 @@ const C4_ACTS=[
  ['CT7.1','d7','Regrouper des objets en familles et lignées','Je classe des objets en familles et lignées'],
  ['CT7.2','d7','Relier les évolutions technologiques aux inventions et innovations','Je relie une évolution technique à une innovation']
 ];
+/* ----- Référentiel Bac pro MELEC (rénové, première session 2026) ----- */
+const MELEC_BLOCS={
+ b1:{nom:'Bloc 1 – Préparation des opérations à réaliser (U2)',court:'U2 Préparation',c:'#3056d3',o:1},
+ b2:{nom:'Bloc 2 – Réalisation et mise en service d\u2019une installation (U31)',court:'U31 Réalisation',c:'#0e9594',o:2},
+ b3:{nom:'Bloc 3 – Maintenance d\u2019une installation (U32)',court:'U32 Maintenance',c:'#c2410c',o:3}
+};
+const MELEC=[
+ ['C1','b1','Analyser les conditions de l\u2019opération et son contexte',['Les informations nécessaires sont recueillies','Les contraintes techniques et d\u2019exécution sont repérées','Les contraintes liées à l\u2019efficacité énergétique sont repérées','Les risques professionnels sont évalués','Les mesures de prévention de santé et sécurité au travail sont proposées','Les contraintes environnementales sont recensées','Les interactions avec les autres intervenants sont repérées','Les habilitations et certifications nécessaires à l\u2019opération sont identifiées']],
+ ['C2','b2','Organiser l\u2019opération dans son contexte',['Après inventaire, les matériels, équipements et outillages manquants sont listés','Le bon d\u2019approvisionnement ou bon de commande est complété','Les tâches sont réparties en fonction des habilitations et des certifications des électriciens affectés','La répartition des tâches prend en compte l\u2019avancement des autres intervenants','Les activités sont organisées de manière chronologique','Les contraintes propres au poste de travail y compris environnementales sont prises en compte','Les activités sont (ré)organisées en fonction des aléas (techniques, organisationnels, etc.)','Les règles de santé et de sécurité au travail sont respectées','Le poste de travail est organisé avec ergonomie','Le poste de travail est approvisionné en matériels, équipements et outillages','Le lieu d\u2019activité est restitué quotidiennement propre et en ordre']],
+ ['C3','b1','Définir une installation à l\u2019aide de solutions préétablies',['Le dossier technique des opérations est constitué et complet','La solution technique proposée répond au besoin du client et elle est pertinente','La solution technique proposée intègre les enjeux d\u2019efficacité énergétique']],
+ ['C4','b2','Réaliser une installation de manière éco-responsable',['Les matériels sont posés conformément aux prescriptions et règles de l\u2019art','Le façonnage est réalisé conformément aux prescriptions et règles de l\u2019art','Les câblages et les raccordements sont réalisés conformément aux prescriptions et règles de l\u2019art','Les adaptations techniques nécessaires sont réalisées','Les réalisations respectent les contraintes liées à l\u2019efficacité énergétique','Les autocontrôles sont réalisés et les fiches d\u2019autocontrôles sont complétées','Les déchets sont triés et évacués de manière sélective','Le consommable est utilisé sans gaspillage','Les règles de santé et de sécurité au travail sont respectées','Les procédures de respect de l\u2019environnement des lieux et des biens sont appliquées']],
+ ['C5','b2','Contrôler les grandeurs caractéristiques de l\u2019installation',['Les contrôles (visuels, caractéristiques, etc.) sont réalisés','Les mesures (électriques, dimensionnelles, etc.) sont réalisées','Les mesures liées à l\u2019efficacité énergétique sont réalisées','Les essais adaptés sont réalisés','Les grandeurs contrôlées sont correctement interprétées au regard des prescriptions','Les règles de santé et de sécurité au travail sont respectées']],
+ ['C6','b2','Régler, paramétrer les matériels de l\u2019installation',['Les réglages sont réalisés conformément aux prescriptions','Les réglages prennent en compte l\u2019efficacité énergétique','Les paramétrages guidés sont réalisés conformément aux prescriptions','Les règles de santé et de sécurité au travail sont respectées']],
+ ['C7','b2','Valider le fonctionnement de l\u2019installation',['L\u2019installation est mise en fonctionnement conformément aux prescriptions','Le fonctionnement est conforme aux spécifications du cahier des charges (y compris celles liées à l\u2019efficacité énergétique)','Les opérations nécessaires à la levée de réserves sont faites','Les règles de santé et de sécurité au travail sont respectées']],
+ ['C8','b3','Diagnostiquer un dysfonctionnement',['Les informations relatives au dysfonctionnement sont analysées','Le fonctionnement de l\u2019installation est analysé','Le diagnostic est posé','Le diagnostic est pertinent et complet','Les règles de santé et de sécurité au travail sont respectées']],
+ ['C9','b3','Remplacer un matériel électrique',['Le matériel électrique à remplacer est identifié','Le matériel électrique à remplacer est correctement déposé','Le matériel électrique de remplacement est correctement choisi','Le matériel électrique de remplacement est correctement installé','Le fonctionnement est vérifié après rétablissement des énergies','Les règles de santé et de sécurité au travail sont respectées']],
+ ['C10','b1','Exploiter les outils numériques dans le contexte professionnel',['Les applications numériques sont exploitées avec pertinence','La recherche d\u2019information est faite avec pertinence','Les moyens et outils de communication numériques sont exploités avec pertinence','Les moyens et outils de communication sont exploités de manière éthique et responsable']],
+ ['C11','b1','Compléter les documents liés aux opérations',['Les documents à compléter sont identifiés','Les informations nécessaires sont identifiées','Les documents sont complétés ou modifiés correctement']],
+ ['C12','b2','Communiquer entre professionnels sur l\u2019opération',['Les informations nécessaires à la communication sont identifiées','Les contraintes techniques sont expliquées','Les choix technologiques sont argumentés','Les choix économiques sont expliqués','Les contraintes techniques liées à la performance énergétique de l\u2019installation sont expliquées','L\u2019état d\u2019avancement de l\u2019opération est justifié','Les difficultés sont remontées à la hiérarchie']],
+ ['C13','b2','Communiquer avec le client/usager sur l\u2019opération',['Les besoins du client sont collectés','Les contraintes techniques d\u2019utilisation et de performances énergétiques de l\u2019installation sont expliquées','Les usages et le fonctionnement de l\u2019installation sont maîtrisés par le client/l\u2019usager','Les choix technologiques et économiques sont expliqués','L\u2019état d\u2019avancement de l\u2019opération et ses contraintes sont expliqués','Les prestations complémentaires sont expliquées','La satisfaction client est collectée']]
+];
+function buildMelec(){
+ const competences={},actions={};
+ MELEC.forEach(([code,bloc,lib,list],i)=>{const k=i+1,cid='c'+k;competences[cid]={code,bloc,lib,o:k};
+  list.forEach((l,j)=>{const n=j+1;actions['a'+k+'_'+n]={code:code+'.'+n,comp:cid,lib:l,el:'',ind:[],o:n}})});
+ return{ref:'melec',titre:'Bac pro MELEC',echelle:'e3',blocs:clone(MELEC_BLOCS),competences,actions};
+}
+
 function buildC4(){
  const competences={},actions={};
  C4_DOMS.forEach(([id,lib,c],i)=>{competences[id]={code:'D'+(i+1),bloc:'b1',lib,c,o:i+1}});
@@ -600,6 +632,7 @@ function buildC4(){
  return{ref:'c4',titre:'Technologie cycle 4',echelle:'e4',blocs:{b1:{nom:'Technologie cycle 4',court:'Cycle 4',c:'#3056d3',o:1}},competences,actions};
 }
 const PRESETS={mfer:{nom:'Bac pro MFER',desc:'13 compétences, 69 critères · NA / ECA / A',build:buildMfer,classes:['2MFER','1MFER','TMFER']},
+ melec:{nom:'Bac pro MELEC',desc:'13 compétences, 78 critères · NA / ECA / A',build:buildMelec,classes:['2MELEC','1MELEC','TMELEC']},
  c4:{nom:'Technologie cycle 4',desc:'26 compétences travaillées · MI / MF / MS / TBM',build:buildC4,classes:['5A','5B','5C','5D','5E','4A','4B','4C','4D','4E','3A','3B','3C','3D','3E','3PM']}};
 function defaultConfig(ref){const p=PRESETS[ref]||PRESETS.mfer;return Object.assign(p.build(),{classes:p.classes.slice(),tps:{},mode:'derniere',trims:{t2:'12-01',t3:'03-01'}})}
 
@@ -661,7 +694,7 @@ const ICO={
 
 /* ===== État ===== */
 const S={v:'home',cfg:undefined,err:false,classe:null,eleves:null,eid:null,mine:null,tp:null,stab:'bilan',code:'',msg:'',fails:0,lock:0,openInd:{},openSC:{},
- admin:false,db:null,a:'dash',ac:null,atp:null,cell:null,edTp:null,edAct:null,edComp:null,confirm:null,ficheEid:null,fy:null,fp:0,evSel:null,pendingImport:null,per:0,openC:{},setupRef:'mfer'};
+ admin:false,db:null,a:'dash',ac:null,atp:null,cell:null,edTp:null,edAct:null,edComp:null,confirm:null,ficheEid:null,fy:null,fp:0,evSel:null,pendingImport:null,per:0,openC:{},setupRef:DEFAULT_REF};
 
 /* ===== Accès au référentiel ===== */
 const LV=()=>ECH[(S.cfg&&S.cfg.echelle)||'e3']||ECH.e3;
@@ -758,13 +791,13 @@ function bilanTable(E,rg,opt){
  const{aids,C}=bilanData(E,rg),A=S.cfg.actions,CC=S.cfg.competences,ed=opt.edit,pr=opt.print,N=NL(),ncol=6+N+(ed?1:0);
  const filt=opt.onlyEval?aids.filter(a=>C[a].tot):aids;
  if(!filt.length)return '<div class="card empty">Aucune évaluation sur cette période.</div>';
- const head=`<tr><th class="cd"></th><th class="tl">Critère</th>${lvls().map(n=>`<th class="nc" title="${esc(L(n).nom)}"><span class="mini c${n}">${L(n).s}</span></th>`).join('')}<th class="nc">Total</th><th class="pc">Réussite</th>${pr?'':'<th class="hc2">Historique</th>'}<th class="sc">Statut</th>${ed?'<th class="ac2">Ajouter</th>':''}</tr>`;
+ const head=`<tr><th class="cd"></th><th class="tl">Critère</th>${lvls().map(n=>`<th class="nc" title="${esc(L(n).nom)}"><span class="mini c${n}">${L(n).s}</span></th>`).join('')}<th class="nc">Total</th><th class="pc">Réussite</th>${pr?'':'<th class="hc2">Historique</th>'}<th class="sc">Statut</th>${ed?'<th class="ac2">Hors TP</th>':''}</tr>`;
  const body=byBloc(groupByComp(filt)).map(([b,gs])=>{const bs=sumCum(gs.flatMap(([,as])=>as.map(a=>C[a])));
   return `<tr class="bh"><td colspan="${ncol-(pr?1:0)}"><span style="color:${blocColor(b)}">${esc(blocName(b))}</span><span class="bhs">${bs.tot?`${bs.tot} éval. · réussite ${tauxTxt(bs.taux)} · ${bs.valides}/${bs.evalues} validés`:'aucune évaluation'}</span></td></tr>`+
   gs.map(([cid,as])=>{const s=sumCum(as.map(a=>C[a])),open=pr||opt.allOpen||S.openSC[cid];
    const ch=`<tr class="ch" ${pr?'':`data-act="scomp" data-c="${esc(cid)}"`}><td class="cd"><span class="chip" style="background:${compColor(cid)}">${esc(CC[cid].code)}</span></td><td class="tl">${pr?'':`<span class="car">${open?'&#9662;':'&#9656;'}</span>`}${esc(CC[cid].lib)}</td>${lvls().map(n=>`<td class="nc">${cnt(s.n[n],n)}</td>`).join('')}<td class="nc"><b>${s.tot}</b></td><td class="pc">${pbar(s.taux)}</td>${pr?'':'<td class="hc2"></td>'}<td class="sc"><span class="sub">${s.valides}/${as.length} validés</span></td>${ed?'<td></td>':''}</tr>`;
    if(!open)return ch;
-   return ch+as.map(a=>{const c=C[a];return `<tr class="ar"><td class="cd">${esc(A[a].code)}</td><td class="tl" title="${esc((A[a].ind||[]).join(' • '))}">${esc(opt.eleve&&A[a].el?A[a].el:A[a].lib)}</td>${lvls().map(n=>`<td class="nc">${cnt(c.n[n],n)}</td>`).join('')}<td class="nc">${c.tot||''}</td><td class="pc">${c.tot?pbar(c.taux):''}</td>${pr?'':`<td class="hc2">${histo(c,ed)}</td>`}<td class="sc">${statut(c)}</td>${ed?`<td class="ac2"><span class="seg">${lvls().map(n=>`<button class="sg c${n}" data-act="dir" data-a="${esc(a)}" data-n="${n}" title="Ajouter une évaluation hors TP : ${esc(L(n).nom)}">+${L(n).s}</button>`).join('')}</span></td>`:''}</tr>`}).join('')}).join('')}).join('');
+   return ch+as.map(a=>{const c=C[a];return `<tr class="ar"><td class="cd">${esc(A[a].code)}</td><td class="tl" title="${esc((A[a].ind||[]).join(' • '))}">${esc(opt.eleve&&A[a].el?A[a].el:A[a].lib)}</td>${lvls().map(n=>`<td class="nc">${cnt(c.n[n],n)}</td>`).join('')}<td class="nc">${c.tot||''}</td><td class="pc">${c.tot?pbar(c.taux):''}</td>${pr?'':`<td class="hc2">${histo(c,ed)}</td>`}<td class="sc">${statut(c)}</td>${ed?`<td class="ac2"><span class="seg">${lvls().map(n=>`<button class="sg c${n}" data-act="dir" data-a="${esc(a)}" data-n="${n}" title="Ajouter une évaluation hors TP : ${esc(L(n).nom)}">+${L(n).s}</button>`).join('')}${c.ev.some(e=>isDirect(e.tid))?`<button class="sg rm" data-act="undo-dir" data-a="${esc(a)}" title="Retirer la dernière évaluation hors TP de ce critère">&minus;</button>`:''}</span></td>`:''}</tr>`}).join('')}).join('')}).join('');
  return `<div class="scroll"><table class="bil ${pr?'pr':''}"><thead>${head}</thead><tbody>${body}</tbody></table></div>`;
 }
 function sumCards(tot,cmp){
@@ -926,12 +959,12 @@ function vFiche(){
  const pch=y==='all'?'':`<div class="per">${[0,1,2,3].map(t=>`<button class="pchip ${S.fp===t?'on':''}" data-act="fp" data-t="${t}">${t?'T'+t:'Année'}</button>`).join('')}</div>`;
  let evb='';
  if(S.evSel){const x=(E[S.evSel.tid]||{})[S.evSel.aid];if(x&&x.p){const A=S.cfg.actions[S.evSel.aid];
-  evb=`<div class="picker"><div class="pinfo"><b>${esc(A.code)} · ${esc(L(x.p).nom)}</b><span>${esc(srcName(S.evSel.tid))} · ${fdate(x.tq)}</span></div>${askBtn('del-ev:'+S.evSel.tid+':'+S.evSel.aid,'Supprimer cette évaluation')}<button class="btn sm ghost" data-act="evsel-close">Fermer</button></div>`}}
+  evb=`<div class="picker top"><div class="pinfo"><b>${esc(A.code)} · ${esc(L(x.p).nom)}</b><span>${esc(srcName(S.evSel.tid))} · ${fdate(x.tq)}</span></div>${askBtn('del-ev:'+S.evSel.tid+':'+S.evSel.aid,'Supprimer cette évaluation')}<button class="btn sm ghost" data-act="evsel-close">Fermer</button></div>`}}
  return `<div class="ov" data-act="fiche-close"><div class="modal" data-act="noop">
  <div class="ahead"><div class="brand" style="margin:0">${logosHtml('lg sm')}<div><h2>${esc(el.prenom)} ${esc(el.nom)}</h2><div class="sub">${esc(c)} · ${esc(S.cfg.titre)} · ${esc(perName(y,S.fp))}</div></div></div><div class="tools">
- ${ysel}${pch}<label class="chk inl ${S.pOnly?'on':''}" title="Pour l\u2019impression"><input type="checkbox" data-chg="ponly" ${S.pOnly?'checked':''}>Critères évalués seulement</label><button class="btn sm sec" data-act="print-one">${ICO.print}Imprimer</button><button class="btn sm ghost" data-act="fiche-csv">CSV</button><button class="btn sm ghost" data-act="fiche-close">Fermer</button></div></div>
+ ${ysel}${pch}<label class="chk inl ${S.pOnly?'on':''}" title="Pour l\u2019impression"><input type="checkbox" data-chg="ponly" ${S.pOnly?'checked':''}>Critères évalués seulement</label>${hasDir(E)?askBtn('reset-dir:'+c+':'+eid,'Réinitialiser les ajouts hors TP'):''}<button class="btn sm sec" data-act="print-one">${ICO.print}Imprimer</button><button class="btn sm ghost" data-act="fiche-csv">CSV</button><button class="btn sm ghost" data-act="fiche-close">Fermer</button></div></div>
  ${sumCards(tot)}
- <div class="bar"><div class="hint" style="margin:0">Validation : ${esc(modeTxt())}. Clique sur une pastille de l\u2019historique pour la supprimer. La colonne « Ajouter » enregistre une évaluation hors TP (atelier, PFMP…).</div><span class="sp"></span><button class="btn sm ghost" data-act="sc-all">Tout déplier / replier</button></div>
+ <div class="bar"><div class="hint" style="margin:0">Validation : ${esc(modeTxt())}. Colonne « Hors TP » : +NA, +ECA, +A ajoutent une évaluation (atelier, PFMP…), le bouton « − » retire la dernière. Pour supprimer n\u2019importe quelle évaluation, clique sur sa pastille dans l\u2019historique.</div><span class="sp"></span><button class="btn sm ghost" data-act="sc-all">Tout déplier / replier</button></div>
  ${bilanTable(E,rg,{edit:true})}</div></div>${evb}`;
 }
 
@@ -1121,6 +1154,17 @@ async function addDirect(a,n){
  const cl=S.ac,e=S.ficheEid,tid='_d'+uid(),now=Date.now(),x=evSlot(cl,e,tid,a);x.p=n;x.tq=now;render();
  if(await safe(Store.put(`evals/${cl}/${e}/${tid}/${a}`,{p:n,tq:now})))toast(S.cfg.actions[a].code+' : '+L(n).nom+' ajouté');
 }
+function hasDir(E){for(const t in E||{})if(isDirect(t)&&E[t]&&Object.values(E[t]).some(x=>x&&x.p))return true;return false}
+async function undoDir(a){
+ const cl=S.ac,e=S.ficheEid,E=evOf(cl,e);let best=null;
+ for(const t in E){if(!isDirect(t))continue;const x=E[t]&&E[t][a];if(x&&x.p&&(!best||(x.tq||0)>=(best.tq||0)))best={t,tq:x.tq||0}}
+ if(!best)return;await delEv(best.t,a);
+}
+async function resetDir(c,e){
+ const R=(S.db.evals[c]||{})[e]||{},up={};let n=0;
+ for(const t of Object.keys(R)){if(!isDirect(t))continue;n+=Object.values(R[t]||{}).filter(x=>x&&x.p).length;delete R[t];up[t]=null}
+ S.evSel=null;render();if(n&&await safe(Store.patch(`evals/${c}/${e}`,up)))toast(`${n} ajout${n>1?'s':''} hors TP retiré${n>1?'s':''}`);
+}
 async function delEv(tid,a){
  const cl=S.ac,e=S.ficheEid,R=(S.db.evals[cl]||{})[e]||{};if(R[tid]){delete R[tid][a];if(!Object.keys(R[tid]).length)delete R[tid]}
  S.evSel=null;render();if(await safe(Store.del(`evals/${cl}/${e}/${tid}/${a}`)))toast('Évaluation supprimée');
@@ -1215,6 +1259,7 @@ async function doConfirm(k){
  else if(t==='del-act'){delete S.cfg.actions[a];render();if(await safe(Store.del(`config/actions/${a}`)))toast('Critère supprimé')}
  else if(t==='del-ev'){await delEv(a,b)}
  else if(t==='valid-stu'){await validStu(a,b)}
+ else if(t==='reset-dir'){await resetDir(a,b)}
  else if(t==='reset-ref'){await applyPreset(S.cfg.ref)}
  else if(t==='preset'){await applyPreset(a)}
  else if(t==='import'){const o=S.pendingImport;S.pendingImport=null;if(!o)return;if(!o.config.adminHash)o.config.adminHash=S.cfg.adminHash;if(await safe(Store.put('',o))){await loadDb();toast('Sauvegarde restaurée')}render()}
@@ -1251,6 +1296,7 @@ const ACT={
  'print-one':()=>doPrint([printPage(S.ac,S.ficheEid,S.fy??CUR_SY,S.fp,S.pOnly)]),
  'print-class':()=>doPrint(elevesOf(S.ac).map(([e])=>printPage(S.ac,e,CUR_SY,S.per))),
  dir:d=>addDirect(d.a,+d.n),
+ 'undo-dir':d=>undoDir(d.a),
  evsel:d=>{S.evSel={tid:d.t,aid:d.a};S.confirm=null;render()},
  'evsel-close':()=>{S.evSel=null;S.confirm=null;render()},
  noop:()=>{},
@@ -1323,17 +1369,26 @@ setInterval(async()=>{
 },25000);
 
 /* ===== Démo ===== */
+const DEMO_SETS={
+ mfer:{cl:['2MFER','1MFER'],extra:'a10_2',prev:[['a1_1',0,15],['a1_3',0,22],['a2_1',1,10],['a4_1',1,14],['a6_2',4,8],['a6_4',4,9],['a6_3',2,3],['a4_2',2,12]],tps:[
+  ['Préparer une intervention de dépannage',[0,1],['a1_1','a1_3','a1_6','a2_1','a2_5','a3_2'],58],
+  ['Réaliser le réseau fluidique d\u2019une chambre froide',[0,1],['a4_1','a4_2','a6_1','a6_2','a6_4','a3_2'],44],
+  ['Câbler le coffret électrique d\u2019une chambre froide',[0,1],['a4_1','a4_2','a6_3','a6_4','a2_6','a12_3'],30],
+  ['Mise en service d\u2019une PAC air/eau',[1],['a7_1','a7_3','a7_4','a7_6','a8_4','a12_2','a4_2'],18],
+  ['Maintenance préventive d\u2019un groupe froid',[1,0],['a9_1','a9_4','a9_6','a9_7','a11_1','a4_1'],7]]},
+ melec:{cl:['2MELEC','1MELEC'],extra:'a11_3',prev:[['a1_1',0,15],['a1_4',0,22],['a4_1',1,10],['a4_3',1,14],['a5_2',4,8],['a5_5',4,9],['a7_1',2,3],['a2_8',2,12]],tps:[
+  ['Préparer l\u2019installation électrique d\u2019un logement',[0,1],['a1_1','a1_2','a1_4','a1_8','a3_2','a10_1'],58],
+  ['Câbler un tableau de communication',[0,1],['a2_5','a2_9','a4_1','a4_3','a4_6','a4_7'],44],
+  ['Mesures de continuité et d\u2019isolement',[0,1],['a5_1','a5_2','a5_5','a2_8','a4_3','a12_6'],30],
+  ['Mettre en service une borne de recharge IRVE',[1],['a5_2','a6_1','a6_3','a7_1','a7_2','a13_2','a13_3'],18],
+  ['Dépanner un éclairage commandé par télérupteur',[1,0],['a8_1','a8_3','a8_4','a9_1','a9_4','a9_5'],7]]}
+};
 async function seedDemo(){
- const c=defaultConfig('mfer');c.adminHash=await hash('demo');const D=864e5,now=Date.now();
- c.tps={
-  tA:{titre:'Préparer une intervention de dépannage',classes:['2MFER','1MFER'],acts:['a1_1','a1_3','a1_6','a2_1','a2_5','a3_2'],actif:true,cree:now-D*58},
-  tB:{titre:'Réaliser le réseau fluidique d\u2019une chambre froide',classes:['2MFER','1MFER'],acts:['a4_1','a4_2','a6_1','a6_2','a6_4','a3_2'],actif:true,cree:now-D*44},
-  tC:{titre:'Câbler le coffret électrique d\u2019une chambre froide',classes:['2MFER','1MFER'],acts:['a4_1','a4_2','a6_3','a6_4','a2_6','a12_3'],actif:true,cree:now-D*30},
-  tD:{titre:'Mise en service d\u2019une PAC air/eau',classes:['1MFER'],acts:['a7_1','a7_3','a7_4','a7_6','a8_4','a12_2','a4_2'],actif:true,cree:now-D*18},
-  tE:{titre:'Maintenance préventive d\u2019un groupe froid',classes:['1MFER','2MFER'],acts:['a9_1','a9_4','a9_6','a9_7','a11_1','a4_1'],actif:true,cree:now-D*7}
- };
- const names={'2MFER':['MARTIN Léa','BERNARD Hugo','PETIT Yanis','DUBOIS Nathan','MOREAU Inès','LAURENT Lucas','SIMON Enzo','MICHEL Louis','GARCIA Adam','ROUX Théo'],
-  '1MFER':['BONNET Kylian','LAMBERT Noah','FONTAINE Zoé','ROUSSEAU Gabriel','VINCENT Mathis','MULLER Arthur','LEROY Ethan','FAURE Raphaël']};
+ const set=DEMO_SETS[DEFAULT_REF]||DEMO_SETS.mfer,K=set.cl;
+ const c=defaultConfig(DEFAULT_REF);c.adminHash=await hash('demo');const D=864e5,now=Date.now();
+ c.tps={};set.tps.forEach(([titre,cls,acts,d],i)=>{c.tps['t'+'ABCDE'[i]]={titre,classes:cls.map(j=>K[j]),acts,actif:true,cree:now-D*d}});
+ const names={[K[0]]:['MARTIN Léa','BERNARD Hugo','PETIT Yanis','DUBOIS Nathan','MOREAU Inès','LAURENT Lucas','SIMON Enzo','MICHEL Louis','GARCIA Adam','ROUX Théo'],
+  [K[1]]:['BONNET Kylian','LAMBERT Noah','FONTAINE Zoé','ROUSSEAU Gabriel','VINCENT Mathis','MULLER Arthur','LEROY Ethan','FAURE Raphaël']};
  let sd=11;const rnd=()=>(sd=(sd*9301+49297)%233280)/233280,cl=v=>Math.max(1,Math.min(3,v));
  const el={},ev={};
  for(const k in names){el[k]={};ev[k]={};names[k].forEach((n,i)=>{const id='e'+k+i,[nom,prenom]=n.split(' ');el[k][id]={nom,prenom,code:'1234'};const E=ev[k][id]={};
@@ -1341,9 +1396,8 @@ async function seedDemo(){
   Object.entries(c.tps).sort((a,b)=>a[1].cree-b[1].cree).forEach(([tid,t])=>{if(!t.classes.includes(k))return;prog+=.25;
    if(tid==='tE'&&rnd()<.5)return;E[tid]={};
    t.acts.forEach(a=>{if(rnd()<.08)return;E[tid][a]={p:cl(Math.round(1.1+skill*1.7+prog*.55+(rnd()-.5)*1.5)),tq:t.cree+36e5}})});
-  if(k==='1MFER'){[['a1_1',0,15],['a1_3',0,22],['a2_1',1,10],['a4_1',1,14],['a6_2',4,8],['a6_4',4,9],['a6_3',2,3],['a4_2',2,12]].forEach(([a,m,d],j)=>{if(rnd()<.3)return;
-   E['_dprev'+j]={[a]:{p:cl(Math.round(.5+skill*2+m*.15)),tq:new Date(CUR_SY,m,d).getTime()}}})}
-  if(rnd()<.6)E['_ddemo'+i]={a10_2:{p:cl(Math.round(1+skill*2)),tq:now-D*3}};
+  if(k===K[1]){set.prev.forEach(([a,m,d],j)=>{if(rnd()<.3)return;E['_dprev'+j]={[a]:{p:cl(Math.round(.5+skill*2+m*.15)),tq:new Date(CUR_SY,m,d).getTime()}}})}
+  if(rnd()<.6)E['_ddemo'+i]={[set.extra]:{p:cl(Math.round(1+skill*2)),tq:now-D*3}};
  })}
  MEM={config:c,eleves:el,evals:ev};
 }
